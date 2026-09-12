@@ -1,0 +1,771 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1100" width="1600" height="1100">
+  <defs>
+    <!-- ==================== 渐变定义 ==================== -->
+    <!-- 背景等距网格地面渐变 -->
+    <radialGradient id="groundGlow" cx="65%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#fdfbf7" stop-opacity="1" />
+      <stop offset="60%" stop-color="#ebe4d8" stop-opacity="1" />
+      <stop offset="100%" stop-color="#ded4c5" stop-opacity="1" />
+    </radialGradient>
+
+    <!-- 地面阴影渐变（右上光源，影子深长延展至左下） -->
+    <linearGradient id="groundShadowGrad" x1="100%" y1="20%" x2="0%" y2="80%">
+      <stop offset="0%" stop-color="#2d261e" stop-opacity="0.38" />
+      <stop offset="45%" stop-color="#4a3e32" stop-opacity="0.22" />
+      <stop offset="100%" stop-color="#695949" stop-opacity="0.0" />
+    </linearGradient>
+
+    <!-- 车架主漆渐变 (深邃英伦赛车绿配光泽) -->
+    <linearGradient id="frameGradLight" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#3c6b54" />
+      <stop offset="40%" stop-color="#284b39" />
+      <stop offset="100%" stop-color="#183024" />
+    </linearGradient>
+    <linearGradient id="frameGradDark" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#234031" />
+      <stop offset="100%" stop-color="#122118" />
+    </linearGradient>
+    <linearGradient id="chromeMetal" x1="80%" y1="10%" x2="20%" y2="90%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="35%" stop-color="#d5d0c8" />
+      <stop offset="70%" stop-color="#8e8981" />
+      <stop offset="100%" stop-color="#55514b" />
+    </linearGradient>
+
+    <!-- 轮胎橡胶与电镀圈渐变 -->
+    <linearGradient id="tireGrad" x1="90%" y1="20%" x2="20%" y2="90%">
+      <stop offset="0%" stop-color="#4f4a43" />
+      <stop offset="50%" stop-color="#322e29" />
+      <stop offset="100%" stop-color="#1b1815" />
+    </linearGradient>
+
+    <!-- 卷羽鹈鹕羽毛质感（微暖银灰白与柔和阴影） -->
+    <linearGradient id="featherLit" x1="80%" y1="10%" x2="20%" y2="90%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="60%" stop-color="#f5f2eb" />
+      <stop offset="100%" stop-color="#ded8cc" />
+    </linearGradient>
+    <linearGradient id="featherShadow" x1="80%" y1="10%" x2="20%" y2="90%">
+      <stop offset="0%" stop-color="#dad4c7" />
+      <stop offset="100%" stop-color="#b8b0a0" />
+    </linearGradient>
+
+    <!-- 鹈鹕大嘴囊（饱满鼓起、受光充血半透明质感） -->
+    <radialGradient id="pouchGradLit" cx="65%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#ffbe98" />
+      <stop offset="50%" stop-color="#f5945f" />
+      <stop offset="85%" stop-color="#dd6f38" />
+      <stop offset="100%" stop-color="#b84d1e" />
+    </radialGradient>
+
+    <!-- 坚硬鸟喙渐变 -->
+    <linearGradient id="beakGrad" x1="90%" y1="20%" x2="10%" y2="80%">
+      <stop offset="0%" stop-color="#ffd599" />
+      <stop offset="50%" stop-color="#fca15d" />
+      <stop offset="100%" stop-color="#d46b28" />
+    </linearGradient>
+
+    <!-- 鲜美大鱼渐变 -->
+    <linearGradient id="fishGrad" x1="70%" y1="0%" x2="20%" y2="100%">
+      <stop offset="0%" stop-color="#d4ecf7" />
+      <stop offset="35%" stop-color="#73b5d8" />
+      <stop offset="80%" stop-color="#346a8d" />
+      <stop offset="100%" stop-color="#1d3d54" />
+    </linearGradient>
+
+    <!-- 蹼足鲜艳角质渐变 -->
+    <linearGradient id="webbedFootGrad" x1="80%" y1="20%" x2="20%" y2="90%">
+      <stop offset="0%" stop-color="#fca059" />
+      <stop offset="70%" stop-color="#de6d23" />
+      <stop offset="100%" stop-color="#9e430b" />
+    </linearGradient>
+
+    <!-- 复古皮革鞍座 -->
+    <linearGradient id="saddleGrad" x1="75%" y1="15%" x2="20%" y2="85%">
+      <stop offset="0%" stop-color="#995833" />
+      <stop offset="50%" stop-color="#69371a" />
+      <stop offset="100%" stop-color="#381b0a" />
+    </linearGradient>
+
+    <!-- 柔和环境漫反射滤镜 -->
+    <filter id="softBlur" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" />
+    </filter>
+  </defs>
+
+  <!-- ======================================================== -->
+  <!-- LAYER 0: 等距地面与光影投影 (Ground & Cast Shadows) -->
+  <!-- ======================================================== -->
+  <g id="layer-ground" class="isometric-layer">
+    <!-- 地面氛围底色 -->
+    <rect width="1600" height="1100" fill="url(#groundGlow)" />
+    
+    <!-- 等距透视参考网格 (微弱优雅辅助线) -->
+    <g id="isometric-grid" opacity="0.18" stroke="#8c7e6c" stroke-width="1">
+      <line x1="0" y1="650" x2="1600" y2="173" />
+      <line x1="0" y1="780" x2="1600" y2="303" />
+      <line x1="0" y1="910" x2="1600" y2="433" />
+      <line x1="0" y1="1040" x2="1600" y2="563" />
+      <line x1="0" y1="420" x2="1600" y2="897" />
+      <line x1="0" y1="550" x2="1600" y2="1027" />
+      <line x1="0" y1="290" x2="1600" y2="767" />
+    </g>
+
+    <!-- 综合投影 (车身、抬起翘头的前轮、后轮接地点、两只大鹈鹕体量) -->
+    <!-- 后轮接地深接触阴影 (后轮触地中心约 440, 840) -->
+    <ellipse cx="445" cy="848" rx="75" ry="24" fill="#1f1812" opacity="0.65" filter="url(#softBlur)" />
+    <ellipse cx="445" cy="848" rx="42" ry="12" fill="#140f0a" opacity="0.8" />
+
+    <!-- 翘起的前轮腾空投影 (前轮悬空在约 1240, 520，影子投在左下地面约 1080, 890，虚化变浅变大) -->
+    <ellipse cx="1090" cy="890" rx="110" ry="36" fill="#30261c" opacity="0.25" filter="url(#softBlur)" />
+
+    <!-- 双人长车架、牙盘、两只饱满鹈鹕在地面拉长的投影群 -->
+    <path id="shadow-body-cast" d="M 420 848 
+             C 520 855, 680 885, 790 890 
+             C 930 895, 1060 905, 1180 885 
+             C 1230 870, 1160 840, 1020 820 
+             C 880 805, 780 795, 620 790 
+             C 510 788, 430 820, 420 848 Z" 
+          fill="url(#groundShadowGrad)" filter="url(#softBlur)" />
+    <!-- 踏板与曲柄微投影 -->
+    <ellipse cx="640" cy="860" rx="35" ry="11" fill="#2d241c" opacity="0.3" filter="url(#softBlur)" />
+    <ellipse cx="890" cy="875" rx="35" ry="11" fill="#2d241c" opacity="0.3" filter="url(#softBlur)" />
+  </g>
+
+  <!-- ======================================================== -->
+  <!-- LAYER 1: 远侧车轮与远侧传动件 (Far Wheels & Far Pedals) -->
+  <!-- ======================================================== -->
+  <g id="layer-far-mechanics" class="isometric-layer">
+    <!-- 远侧后轮内侧轮辋与辐条 (由于等距视角，远侧轮胎与近侧形成立体厚度) -->
+    <g id="far-rear-wheel">
+      <ellipse cx="430" cy="815" rx="100" ry="125" fill="none" stroke="#25221d" stroke-width="14" transform="rotate(-15, 430, 815)" />
+      <ellipse cx="430" cy="815" rx="90" ry="115" fill="none" stroke="#686259" stroke-width="4" transform="rotate(-15, 430, 815)" />
+    </g>
+
+    <!-- 后座远侧脚踏与曲柄 (处于向上/向前相位) -->
+    <g id="far-stoker-crank-pedal">
+      <line x1="620" y1="760" x2="590" y2="720" stroke="#48443d" stroke-width="9" stroke-linecap="round" />
+      <!-- 远侧脚踏板 (等距倾斜) -->
+      <polygon points="575,715 605,710 615,720 585,725" fill="#2b2723" stroke="#5d574f" stroke-width="2" />
+    </g>
+
+    <!-- 前座远侧脚踏与曲柄 -->
+    <g id="far-captain-crank-pedal">
+      <line x1="880" y1="675" x2="850" y2="635" stroke="#48443d" stroke-width="9" stroke-linecap="round" />
+      <polygon points="835,630 865,625 875,635 845,640" fill="#2b2723" stroke="#5d574f" stroke-width="2" />
+    </g>
+  </g>
+
+  <!-- ======================================================== -->
+  <!-- LAYER 2: 后座卷羽鹈鹕 (The Stoker Dalmatian Pelican) -->
+  <!-- ======================================================== -->
+  <g id="layer-pelican-rear" class="isometric-layer">
+    <!-- 后座鹈鹕：奋力踩踏、双翅挥动、卷羽蓬松、呆萌配合 -->
+    
+    <!-- 远端大脚蹼 (踏在远端踏板 595, 715 上) -->
+    <g id="pelican-rear-far-foot">
+      <path d="M 595 720 L 565 695 C 550 690, 535 700, 545 715 L 590 730 Z" fill="#c95f1e" stroke="#873708" stroke-width="2" />
+      <path d="M 590 730 L 610 755" stroke="#db6d28" stroke-width="12" stroke-linecap="round" />
+    </g>
+
+    <!-- 尾部浓密羽簇 (卷羽特色：卷曲层次羽片) -->
+    <g id="pelican-rear-tail">
+      <path d="M 440 620 C 400 630, 370 660, 385 695 C 410 710, 445 680, 465 650 Z" fill="url(#featherShadow)" stroke="#bfb6a4" stroke-width="3" />
+      <path d="M 380 660 C 365 675, 360 695, 375 705 C 390 705, 410 690, 420 670 Z" fill="#cdc4b2" />
+      <path d="M 395 685 C 385 705, 385 720, 400 725 C 415 720, 430 705, 435 685 Z" fill="#bfb5a3" />
+    </g>
+
+    <!-- 后座圆滚饱满躯体 (体型硕大，微前倾用力蹬) -->
+    <g id="pelican-rear-torso">
+      <ellipse cx="510" cy="625" rx="105" ry="85" fill="url(#featherLit)" stroke="#cac1af" stroke-width="3" transform="rotate(-22, 510, 625)" />
+      <!-- 胸腹部卷曲羽毛纹理 (Dalmatian curly crest texture) -->
+      <path d="M 480 655 Q 510 675 540 650 Q 565 675 580 640" fill="none" stroke="#bfb4a0" stroke-width="3.5" stroke-linecap="round" />
+      <path d="M 460 630 Q 490 650 520 625 Q 545 645 565 615" fill="none" stroke="#bfb4a0" stroke-width="3" stroke-linecap="round" />
+    </g>
+
+    <!-- 后座长颈与头部 -->
+    <g id="pelican-rear-neck-head">
+      <!-- S型粗壮脖颈 -->
+      <path d="M 535 570 C 530 510, 545 460, 580 430 C 605 410, 630 425, 625 460 C 615 500, 595 550, 585 580 Z" fill="url(#featherLit)" stroke="#cac1af" stroke-width="3" />
+      
+      <!-- 卷羽鹈鹕标牌特征：后脑与颈背蓬松散开的卷羽头冠 (Crinkled curly feathers) -->
+      <g id="rear-curled-crest">
+        <path d="M 575 425 C 555 410, 545 390, 560 380 C 575 380, 585 400, 585 415 Z" fill="#ffffff" stroke="#c0b7a5" stroke-width="2.5" />
+        <path d="M 590 410 C 580 390, 575 370, 595 365 C 610 370, 610 390, 605 408 Z" fill="#fdfbf7" stroke="#c0b7a5" stroke-width="2.5" />
+        <path d="M 605 405 C 605 385, 610 365, 628 368 C 638 380, 630 400, 620 412 Z" fill="#eae4d6" stroke="#c0b7a5" stroke-width="2.5" />
+        <path d="M 565 435 C 540 430, 535 410, 550 400 C 565 400, 575 415, 575 430 Z" fill="#ded7c6" stroke="#b0a693" stroke-width="2" />
+      </g>
+
+      <!-- 头部主体 -->
+      <circle cx="615" cy="435" r="32" fill="url(#featherLit)" stroke="#cfc6b5" stroke-width="2.5" />
+      
+      <!-- 眼睛（炯炯有神、专注看前路） -->
+      <ellipse cx="628" cy="425" rx="7" ry="9" fill="#221e1a" />
+      <circle cx="631" cy="422" r="3" fill="#ffffff" />
+      <circle cx="628" cy="428" r="1.2" fill="#ffd199" />
+      <!-- 眼周裸露粉橙色眼睑皮肤 -->
+      <path d="M 618 424 C 622 414, 638 414, 642 425 C 638 435, 622 436, 618 424 Z" fill="none" stroke="#f28755" stroke-width="2.5" />
+
+      <!-- 后座巨喙与大喉囊（虽然没叼大鱼，但同样饱满充满干劲，为前座加油鼓劲） -->
+      <g id="pelican-rear-beak">
+        <!-- 喉囊 -->
+        <path d="M 635 448 Q 690 490 730 465 Q 675 515 620 472 Z" fill="url(#pouchGradLit)" stroke="#c25720" stroke-width="3" />
+        <!-- 喉囊微细纹理 -->
+        <path d="M 645 460 Q 685 490 710 472" fill="none" stroke="#e0753d" stroke-width="2" />
+        <!-- 坚固长上喙 -->
+        <polygon points="630,432 755,445 760,453 635,448" fill="url(#beakGrad)" stroke="#bd5c22" stroke-width="2.5" />
+        <!-- 喙尖角质红钩 -->
+        <path d="M 755 445 Q 766 450 760 458 Q 752 455 754 446 Z" fill="#9e2a05" />
+      </g>
+    </g>
+
+    <!-- 后座近端大腿与膝盖 (向下蹬踩向近侧脚踏) -->
+    <g id="pelican-rear-near-leg">
+      <!-- 粗壮大腿羽毛短裤 (Thigh plumage) -->
+      <path d="M 520 670 C 545 685, 570 710, 560 740 C 540 750, 515 730, 505 700 Z" fill="#eae3d5" stroke="#cac0ae" stroke-width="3" />
+      <!-- 橙黄色小腿骨骼 (胫骨) -->
+      <line x1="550" y1="735" x2="655" y2="820" stroke="#f0883a" stroke-width="14" stroke-linecap="round" />
+      <line x1="550" y1="735" x2="655" y2="820" stroke="#ffd299" stroke-width="3" stroke-linecap="round" />
+
+      <!-- 踩在踏板上的近端巨大蹼足 (宽大四趾蹼足，稳稳踩踏) -->
+      <g id="rear-near-foot-webbed" transform="translate(655, 820)">
+        <polygon points="-10,-12 38,-2 52,18 10,22 -15,10" fill="url(#webbedFootGrad)" stroke="#9c4208" stroke-width="3" />
+        <!-- 蹼蹼纹理裂褶与利爪 -->
+        <line x1="5" y1="0" x2="48" y2="10" stroke="#7e3204" stroke-width="2.5" />
+        <line x1="0" y1="5" x2="35" y2="20" stroke="#7e3204" stroke-width="2" />
+        <!-- 脚趾前爪钩 -->
+        <polygon points="50,16 60,20 48,22" fill="#2d2218" />
+        <polygon points="38,-3 46,-1 36,3" fill="#2d2218" />
+      </g>
+    </g>
+
+    <!-- 后座大翅膀 (搭在后把手上，或随风微微展翅平衡) -->
+    <g id="pelican-rear-wing">
+      <path d="M 470 590 
+               C 490 560, 550 550, 600 580 
+               C 620 630, 580 690, 530 705 
+               C 480 715, 450 650, 470 590 Z" 
+            fill="url(#featherLit)" stroke="#cac1af" stroke-width="3" />
+      <!-- 飞羽主次层叠 -->
+      <path d="M 490 625 C 530 630, 570 650, 585 680" fill="none" stroke="#b8ad99" stroke-width="3" />
+      <path d="M 475 645 C 510 655, 545 675, 560 705" fill="none" stroke="#b8ad99" stroke-width="2.5" />
+      <!-- 伸向前把手抓握的手翼关节 -->
+      <path d="M 590 600 Q 640 615 675 640" fill="none" stroke="#f5ede0" stroke-width="15" stroke-linecap="round" />
+      <circle cx="675" cy="640" r="10" fill="#dfd5c4" />
+    </g>
+  </g>
+
+  <!-- ======================================================== -->
+  <!-- LAYER 3: 双人自行车核心金属结构 (Tandem Bike Frame & Drive) -->
+  <!-- ======================================================== -->
+  <g id="layer-tandem-bicycle" class="isometric-layer">
+    
+    <!-- A. 后轮总成 (接地触点约 445, 845) -->
+    <g id="bike-rear-wheel">
+      <!-- 外胎 (等距视角下的立体倾斜椭圆) -->
+      <g transform="translate(445, 810) rotate(-16)">
+        <!-- 胎面花纹外圈 -->
+        <ellipse cx="0" cy="0" rx="108" ry="136" fill="none" stroke="url(#tireGrad)" stroke-width="20" />
+        <ellipse cx="0" cy="0" rx="108" ry="136" fill="none" stroke="#1f1c18" stroke-width="4" stroke-dasharray="8,6" />
+        <!-- 复古象牙白胎侧壁 (Vintage Cream Sidewall) -->
+        <ellipse cx="0" cy="0" rx="98" ry="124" fill="none" stroke="#e8dfce" stroke-width="9" />
+        <!-- 亮铬合金轮辋 -->
+        <ellipse cx="0" cy="0" rx="90" ry="114" fill="none" stroke="url(#chromeMetal)" stroke-width="6" />
+
+        <!-- 36根高密度金属辐条 (Spokes 交叉编织质感) -->
+        <g id="rear-spokes" stroke="#b5afa5" stroke-width="1.6" opacity="0.85">
+          <line x1="0" y1="0" x2="0" y2="-112" />
+          <line x1="0" y1="0" x2="0" y2="112" />
+          <line x1="0" y1="0" x2="-88" y2="0" />
+          <line x1="0" y1="0" x2="88" y2="0" />
+          <line x1="0" y1="0" x2="-62" y2="-78" />
+          <line x1="0" y1="0" x2="62" y2="78" />
+          <line x1="0" y1="0" x2="62" y2="-78" />
+          <line x1="0" y1="0" x2="-62" y2="78" />
+          <line x1="0" y1="0" x2="-80" y2="-45" />
+          <line x1="0" y1="0" x2="80" y2="45" />
+          <line x1="0" y1="0" x2="80" y2="-45" />
+          <line x1="0" y1="0" x2="-80" y2="45" />
+          <line x1="0" y1="0" x2="-35" y2="-98" />
+          <line x1="0" y1="0" x2="35" y2="98" />
+          <line x1="0" y1="0" x2="35" y2="-98" />
+          <line x1="0" y1="0" x2="-35" y2="98" />
+        </g>
+
+        <!-- 飞轮塔轮组 (Cassette Cogs / 多级变速齿轮) -->
+        <circle cx="0" cy="0" r="26" fill="#4d473e" stroke="#2b2824" stroke-width="2" />
+        <circle cx="0" cy="0" r="20" fill="none" stroke="#d5cebe" stroke-width="3" stroke-dasharray="5,3" />
+        <circle cx="0" cy="0" r="14" fill="none" stroke="#f0ebe0" stroke-width="3" stroke-dasharray="4,2" />
+        <circle cx="0" cy="0" r="8" fill="#1f1d19" />
+      </g>
+    </g>
+
+    <!-- B. 经典复古绿色后挡泥板 (深绿配金线，弧度优雅包裹后轮) -->
+    <g id="bike-rear-fender">
+      <path d="M 345 810 C 340 730, 390 670, 480 685 C 520 690, 545 715, 560 740" 
+            fill="none" stroke="#1d3829" stroke-width="15" stroke-linecap="round" />
+      <!-- 金色拉花线 -->
+      <path d="M 350 805 C 348 735, 395 678, 480 692 C 515 696, 540 720, 555 740" 
+            fill="none" stroke="#d9b15b" stroke-width="1.8" />
+      <!-- 挡泥板金属支撑拉杆 -->
+      <line x1="445" y1="810" x2="360" y2="825" stroke="#948d82" stroke-width="4" />
+      <line x1="445" y1="810" x2="400" y2="720" stroke="#948d82" stroke-width="4" />
+    </g>
+
+    <!-- C. 传动系统：前后双牙盘、同步链条、主驱动链条与变速后拨 -->
+    <g id="bike-drivetrain">
+      <!-- 1. 后五通中轴牙盘 (Stoker Chainring: 640, 805) -->
+      <g id="stoker-chainring">
+        <circle cx="640" cy="805" r="38" fill="url(#chromeMetal)" stroke="#302c26" stroke-width="3" />
+        <circle cx="640" cy="805" r="32" fill="none" stroke="#1a1814" stroke-width="4" stroke-dasharray="6,4" />
+        <circle cx="640" cy="805" r="18" fill="#2d4939" stroke="#caa246" stroke-width="2" />
+      </g>
+
+      <!-- 2. 前五通中轴牙盘 (Captain Chainring: 890, 725) -->
+      <g id="captain-chainring">
+        <circle cx="890" cy="725" r="44" fill="url(#chromeMetal)" stroke="#302c26" stroke-width="3" />
+        <circle cx="890" cy="725" r="38" fill="none" stroke="#1a1814" stroke-width="4" stroke-dasharray="6,4" />
+        <circle cx="890" cy="725" r="22" fill="#2d4939" stroke="#caa246" stroke-width="2.5" />
+      </g>
+
+      <!-- 3. 同步传动链条 (Connecting Timing Chain: 连接前牙盘 890,725 与 后牙盘 640,805) -->
+      <g id="timing-chain">
+        <!-- 上链条线 -->
+        <line x1="640" y1="770" x2="890" y2="685" stroke="#1f1d1a" stroke-width="7" stroke-linecap="round" />
+        <line x1="640" y1="770" x2="890" y2="685" stroke="#a39c90" stroke-width="3" stroke-dasharray="6,3" />
+        <!-- 下链条线 -->
+        <line x1="640" y1="840" x2="890" y2="765" stroke="#1f1d1a" stroke-width="7" stroke-linecap="round" />
+        <line x1="640" y1="840" x2="890" y2="765" stroke="#a39c90" stroke-width="3" stroke-dasharray="6,3" />
+      </g>
+
+      <!-- 4. 主驱动链条 (Drive Chain: 连接后牙盘 640,805 与 后飞轮 445,810) -->
+      <g id="rear-drive-chain">
+        <!-- 上驱动链条 -->
+        <line x1="445" y1="790" x2="640" y2="778" stroke="#1f1d1a" stroke-width="7" stroke-linecap="round" />
+        <line x1="445" y1="790" x2="640" y2="778" stroke="#cfc8bb" stroke-width="3" stroke-dasharray="5,3" />
+        <!-- 下驱动链条与后拨链器 (Rear Derailleur) -->
+        <path d="M 640 838 L 475 838 L 452 825 L 445 810" fill="none" stroke="#1f1d1a" stroke-width="7" stroke-linecap="round" />
+        <path d="M 640 838 L 475 838 L 452 825 L 445 810" fill="none" stroke="#cfc8bb" stroke-width="3" stroke-dasharray="5,3" />
+        <!-- 导轮张力臂小机械零件 -->
+        <polygon points="468,825 480,845 460,845" fill="#443f38" stroke="#1c1a17" stroke-width="2" />
+        <circle cx="474" cy="840" r="5" fill="#c4bcad" />
+      </g>
+    </g>
+
+    <!-- D. 双人加长钢架车身 (Tandem Frame - 核心几何，昂扬抬首角度，带立体管壁厚度) -->
+    <g id="bike-frame-tubes">
+      <!-- 关键管件定位：
+           后轴: (445, 810)
+           后立管三通(后座下): (530, 680)
+           后中轴五通: (640, 805)
+           前立管三通(前座下): (780, 595)
+           前中轴五通: (890, 725)
+           车头管(头碗组): (1070, 475)
+           前叉端(前轮轴翘头悬空): (1180, 480)
+      -->
+      
+      <!-- 1. 后下叉 (Chainstay) -->
+      <line x1="445" y1="810" x2="640" y2="805" stroke="url(#frameGradDark)" stroke-width="16" stroke-linecap="round" />
+      <line x1="445" y1="808" x2="640" y2="803" stroke="#528a6f" stroke-width="3" />
+
+      <!-- 2. 后上叉 (Seatstay) -->
+      <line x1="445" y1="810" x2="530" y2="680" stroke="url(#frameGradLight)" stroke-width="14" stroke-linecap="round" />
+      <line x1="447" y1="807" x2="528" y2="682" stroke="#68a889" stroke-width="2.5" />
+
+      <!-- 3. 后座立管 (Rear Seat Tube) -->
+      <line x1="640" y1="805" x2="530" y2="680" stroke="url(#frameGradLight)" stroke-width="18" stroke-linecap="round" />
+      <line x1="638" y1="802" x2="532" y2="682" stroke="#68a889" stroke-width="3" />
+
+      <!-- 4. 底部连接底管 (Bottom Tie Tube: 连接后五通与前五通) -->
+      <line x1="640" y1="805" x2="890" y2="725" stroke="url(#frameGradDark)" stroke-width="19" stroke-linecap="round" />
+      <line x1="642" y1="802" x2="888" y2="723" stroke="#528a6f" stroke-width="3.5" />
+
+      <!-- 5. 中间对角加强斜撑管 (Lateral Diagonal Brace) -->
+      <line x1="530" y1="680" x2="890" y2="725" stroke="url(#frameGradDark)" stroke-width="16" stroke-linecap="round" />
+
+      <!-- 6. 前座立管 (Front Seat Tube) -->
+      <line x1="890" y1="725" x2="780" y2="595" stroke="url(#frameGradLight)" stroke-width="18" stroke-linecap="round" />
+      <line x1="888" y1="722" x2="782" y2="597" stroke="#68a889" stroke-width="3.5" />
+
+      <!-- 7. 后上管 (Rear Top Tube: 连接后座与前立管) -->
+      <line x1="530" y1="680" x2="780" y2="595" stroke="url(#frameGradLight)" stroke-width="18" stroke-linecap="round" />
+      <line x1="532" y1="677" x2="778" y2="594" stroke="#68a889" stroke-width="3.5" />
+
+      <!-- 8. 前下管 (Front Down Tube: 890,725 到 车头管 1070,475) -->
+      <line x1="890" y1="725" x2="1070" y2="475" stroke="url(#frameGradDark)" stroke-width="20" stroke-linecap="round" />
+      <line x1="892" y1="721" x2="1068" y2="473" stroke="#528a6f" stroke-width="3.5" />
+
+      <!-- 9. 前主上梁管 (Front Top Tube: 780,595 到 车头管 1060,450 —— 车架标语承载处！) -->
+      <line x1="780" y1="595" x2="1060" y2="450" stroke="url(#frameGradLight)" stroke-width="26" stroke-linecap="round" />
+      <!-- 受光顶级高光边线 -->
+      <line x1="782" y1="588" x2="1058" y2="444" stroke="#87c7a7" stroke-width="4" stroke-linecap="round" />
+
+      <!-- ============================================== -->
+      <!-- 标志性车标字样：PELICAN (等距角度精准透视倾斜贴合) -->
+      <!-- ============================================== -->
+      <g id="frame-brand-logo" transform="translate(805, 580) rotate(-27.5)">
+        <!-- 金色高档金属边框底衬 -->
+        <rect x="0" y="-12" width="225" height="24" rx="5" fill="#14261c" stroke="#caa246" stroke-width="2" />
+        <text x="112" y="5" 
+              font-family="'Trebuchet MS', 'Arial Black', Impact, sans-serif" 
+              font-size="16" 
+              font-weight="900" 
+              letter-spacing="7" 
+              text-anchor="middle" 
+              fill="#f7df99" 
+              stroke="#8c6a1e" 
+              stroke-width="0.8">
+          PELICAN
+        </text>
+        <!-- 左右复古装饰星标 -->
+        <polygon points="16,0 20,-4 24,0 20,4" fill="#caa246" />
+        <polygon points="200,0 204,-4 208,0 204,4" fill="#caa246" />
+      </g>
+
+      <!-- 10. 头管 (Head Tube: 1060,440 到 1075,485) -->
+      <line x1="1060" y1="440" x2="1078" y2="485" stroke="url(#frameGradLight)" stroke-width="24" stroke-linecap="round" />
+      <circle cx="1060" cy="438" r="14" fill="url(#chromeMetal)" stroke="#221e1a" stroke-width="2" />
+      <circle cx="1078" cy="487" r="14" fill="url(#chromeMetal)" stroke="#221e1a" stroke-width="2" />
+
+      <!-- 11. 经典复古双肩前叉 (Front Fork: 从头管指向前轮轴 1180, 480，翘头悬空！) -->
+      <g id="front-fork">
+        <!-- 叉肩镀铬高光件 -->
+        <ellipse cx="1078" cy="487" rx="16" ry="10" fill="url(#chromeMetal)" stroke="#26231e" stroke-width="2" transform="rotate(-15, 1078, 487)" />
+        <!-- 左右双叉腿 -->
+        <line x1="1078" y1="487" x2="1175" y2="475" stroke="url(#frameGradLight)" stroke-width="14" stroke-linecap="round" />
+        <line x1="1078" y1="495" x2="1178" y2="485" stroke="url(#frameGradDark)" stroke-width="12" stroke-linecap="round" />
+        <!-- 叉脚高光端头 -->
+        <circle cx="1178" cy="480" r="10" fill="url(#chromeMetal)" stroke="#26231e" stroke-width="2" />
+      </g>
+    </g>
+
+    <!-- E. 车座与车把控制部件 (Saddles & Handlebars) -->
+    <!-- 后座鞍座 (Stoker Saddle: 530, 680 上方) -->
+    <g id="stoker-saddle">
+      <!-- 镀铬座管 -->
+      <line x1="530" y1="680" x2="525" y2="640" stroke="url(#chromeMetal)" stroke-width="10" stroke-linecap="round" />
+      <!-- 双双弹簧缓冲底座 -->
+      <circle cx="510" cy="640" r="6" fill="none" stroke="#48433c" stroke-width="3" />
+      <circle cx="522" cy="640" r="6" fill="none" stroke="#48433c" stroke-width="3" />
+      <!-- 复古牛皮宽边鞍座 -->
+      <path d="M 485 635 C 500 622, 545 625, 555 632 C 560 636, 550 644, 530 644 C 510 644, 488 642, 485 635 Z" 
+            fill="url(#saddleGrad)" stroke="#2b1406" stroke-width="2.5" />
+      <!-- 侧边铜铆钉装饰 -->
+      <circle cx="498" cy="636" r="2" fill="#d9b35b" />
+      <circle cx="512" cy="637" r="2" fill="#d9b35b" />
+      <circle cx="526" cy="637" r="2" fill="#d9b35b" />
+    </g>
+
+    <!-- 后车把 (Stoker Handlebar: 固定在前座立管上 780, 595 处) -->
+    <g id="stoker-handlebar">
+      <!-- 把立 -->
+      <line x1="775" y1="600" x2="745" y2="610" stroke="url(#chromeMetal)" stroke-width="8" stroke-linecap="round" />
+      <!-- 弯把 -->
+      <path d="M 725 615 Q 755 600 765 625" fill="none" stroke="url(#chromeMetal)" stroke-width="7" stroke-linecap="round" />
+      <rect x="715" y="612" width="18" height="8" rx="4" fill="#69371a" />
+    </g>
+
+    <!-- 前座鞍座 (Captain Saddle: 780, 595 上方) -->
+    <g id="captain-saddle">
+      <line x1="780" y1="595" x2="775" y2="550" stroke="url(#chromeMetal)" stroke-width="10" stroke-linecap="round" />
+      <circle cx="760" cy="552" r="6" fill="none" stroke="#48433c" stroke-width="3" />
+      <circle cx="772" cy="552" r="6" fill="none" stroke="#48433c" stroke-width="3" />
+      <path d="M 735 548 C 750 535, 795 538, 805 545 C 810 549, 800 557, 780 557 C 760 557, 738 555, 735 548 Z" 
+            fill="url(#saddleGrad)" stroke="#2b1406" stroke-width="2.5" />
+      <circle cx="748" cy="549" r="2" fill="#d9b35b" />
+      <circle cx="762" cy="550" r="2" fill="#d9b35b" />
+      <circle cx="776" cy="550" r="2" fill="#d9b35b" />
+    </g>
+
+    <!-- 前车把总成 (Captain Handlebar & Head: 1060, 440 头碗延伸) -->
+    <g id="captain-handlebar">
+      <!-- 鹅颈电镀把立 (Gooseneck Stem) -->
+      <path d="M 1060 440 L 1055 395 Q 1055 375 1030 380" fill="none" stroke="url(#chromeMetal)" stroke-width="9" stroke-linecap="round" />
+      <!-- 复古公路/旅行燕把 (Swept-back Moustache Bar，极具等距立体透视) -->
+      <path d="M 985 410 C 1020 375, 1045 375, 1075 390 C 1090 400, 1085 425, 1060 425" 
+            fill="none" stroke="url(#chromeMetal)" stroke-width="8" stroke-linecap="round" />
+      <!-- 两端棕色皮革把套 -->
+      <rect x="980" y="405" width="22" height="10" rx="5" fill="#6e3919" stroke="#361a08" stroke-width="1.5" transform="rotate(25, 990, 410)" />
+      <rect x="1055" y="418" width="22" height="10" rx="5" fill="#6e3919" stroke="#361a08" stroke-width="1.5" transform="rotate(-15, 1065, 422)" />
+      
+      <!-- 复古黄铜小铃铛 -->
+      <circle cx="1036" cy="372" r="7.5" fill="#e8ba46" stroke="#946d14" stroke-width="2" />
+      <circle cx="1038" cy="370" r="2.5" fill="#ffffff" opacity="0.8" />
+    </g>
+
+    <!-- F. 翘头悬空的前轮总成 (Wheelie Front Wheel: 轴心位于 1180, 480，完全腾空翘起！) -->
+    <g id="bike-front-wheel-wheelie">
+      <g transform="translate(1180, 480) rotate(-16)">
+        <!-- 橡胶外胎 -->
+        <ellipse cx="0" cy="0" rx="108" ry="136" fill="none" stroke="url(#tireGrad)" stroke-width="20" />
+        <ellipse cx="0" cy="0" rx="108" ry="136" fill="none" stroke="#1f1c18" stroke-width="4" stroke-dasharray="8,6" />
+        <!-- 象牙白侧壁 -->
+        <ellipse cx="0" cy="0" rx="98" ry="124" fill="none" stroke="#e8dfce" stroke-width="9" />
+        <!-- 铬合金轮辋 -->
+        <ellipse cx="0" cy="0" rx="90" ry="114" fill="none" stroke="url(#chromeMetal)" stroke-width="6" />
+
+        <!-- 36根高密度金属辐条 -->
+        <g id="front-spokes" stroke="#b5afa5" stroke-width="1.6" opacity="0.85">
+          <line x1="0" y1="0" x2="0" y2="-112" />
+          <line x1="0" y1="0" x2="0" y2="112" />
+          <line x1="0" y1="0" x2="-88" y2="0" />
+          <line x1="0" y1="0" x2="88" y2="0" />
+          <line x1="0" y1="0" x2="-62" y2="-78" />
+          <line x1="0" y1="0" x2="62" y2="78" />
+          <line x1="0" y1="0" x2="62" y2="-78" />
+          <line x1="0" y1="0" x2="-62" y2="78" />
+          <line x1="0" y1="0" x2="-80" y2="-45" />
+          <line x1="0" y1="0" x2="80" y2="45" />
+          <line x1="0" y1="0" x2="80" y2="-45" />
+          <line x1="0" y1="0" x2="-80" y2="45" />
+          <line x1="0" y1="0" x2="-35" y2="-98" />
+          <line x1="0" y1="0" x2="35" y2="98" />
+          <line x1="0" y1="0" x2="35" y2="-98" />
+          <line x1="0" y1="0" x2="-35" y2="98" />
+        </g>
+
+        <!-- 前轮轴花鼓 (Front Hub) -->
+        <circle cx="0" cy="0" r="16" fill="url(#chromeMetal)" stroke="#221e1a" stroke-width="2" />
+        <circle cx="0" cy="0" r="7" fill="#1b1815" />
+      </g>
+
+      <!-- 前轮复古挡泥板 (同样跟随前叉高高扬起) -->
+      <path d="M 1120 375 C 1170 350, 1240 375, 1270 435" 
+            fill="none" stroke="#1d3829" stroke-width="15" stroke-linecap="round" />
+      <path d="M 1125 375 C 1172 353, 1238 377, 1265 433" 
+            fill="none" stroke="#d9b15b" stroke-width="1.8" />
+      <line x1="1180" y1="480" x2="1240" y2="400" stroke="#948d82" stroke-width="4" />
+    </g>
+
+    <!-- G. 近侧曲柄与脚踏 (Near Cranksets & Pedals) -->
+    <!-- 1. 后座近侧曲柄 (从 640,805 顺势向下后方 670, 850) -->
+    <g id="stoker-near-crank">
+      <line x1="640" y1="805" x2="670" y2="850" stroke="url(#chromeMetal)" stroke-width="10" stroke-linecap="round" />
+      <circle cx="640" cy="805" r="9" fill="#1b1815" />
+      <!-- 近侧金属带齿脚踏板 (承托后座近侧大脚蹼) -->
+      <polygon points="655,845 688,840 698,855 665,860" fill="#292520" stroke="#787063" stroke-width="2.5" />
+      <line x1="660" y1="846" x2="693" y2="841" stroke="#f09635" stroke-width="2" /> <!-- 反光片 -->
+    </g>
+
+    <!-- 2. 前座近侧曲柄 (从 890,725 顺势向下前方 920, 770) -->
+    <g id="captain-near-crank">
+      <line x1="890" y1="725" x2="920" y2="770" stroke="url(#chromeMetal)" stroke-width="10" stroke-linecap="round" />
+      <circle cx="890" cy="725" r="9" fill="#1b1815" />
+      <!-- 近侧金属带齿脚踏板 (承托前座主角大脚蹼) -->
+      <polygon points="905,765 938,760 948,775 915,780" fill="#292520" stroke="#787063" stroke-width="2.5" />
+      <line x1="910" y1="766" x2="943" y2="761" stroke="#f09635" stroke-width="2" /> <!-- 反光片 -->
+    </g>
+  </g>
+
+  <!-- ======================================================== -->
+  <!-- LAYER 4: 前座主角卷羽鹈鹕队长 (Captain Dalmatian Pelican) -->
+  <!-- 核心重点：嘴里叼着鲜鱼、喉囊高度鼓起、卷羽、脚蹼踩踏板、把控翘头 -->
+  <!-- ======================================================== -->
+  <g id="layer-pelican-front-hero" class="isometric-layer">
+    
+    <!-- 远侧手翼 (牢牢抓在左车把 995, 410 上) -->
+    <path id="pelican-hero-far-arm" d="M 830 470 Q 910 440 995 410" fill="none" stroke="#ded8cb" stroke-width="18" stroke-linecap="round" />
+
+    <!-- 尾羽与臀部 -->
+    <g id="pelican-hero-tail">
+      <path d="M 680 540 C 650 555, 630 585, 645 615 C 670 630, 705 600, 725 570 Z" fill="url(#featherShadow)" stroke="#b8af9d" stroke-width="3" />
+      <path d="M 645 580 C 630 600, 635 620, 655 625 C 675 620, 690 600, 695 580 Z" fill="#cfc7b5" />
+    </g>
+
+    <!-- 前座队长硕大躯体 (充满力量感，迎风后仰控车翘头) -->
+    <g id="pelican-hero-torso">
+      <ellipse cx="765" cy="535" rx="115" ry="95" fill="url(#featherLit)" stroke="#cac1af" stroke-width="3" transform="rotate(-26, 765, 535)" />
+      <!-- 腹部卷羽纹理细节 (Curled Feather tufts) -->
+      <path d="M 730 575 Q 765 600 805 570 Q 835 595 860 560" fill="none" stroke="#bfb4a0" stroke-width="3.5" stroke-linecap="round" />
+      <path d="M 710 545 Q 745 570 780 540 Q 815 565 840 535" fill="none" stroke="#bfb4a0" stroke-width="3" stroke-linecap="round" />
+    </g>
+
+    <!-- 粗壮长颈 (延伸至高昂的头部) -->
+    <g id="pelican-hero-neck">
+      <!-- 脖颈受光面与阴影面 -->
+      <path d="M 785 470 C 780 400, 805 345, 850 305 C 875 285, 910 295, 905 340 C 895 390, 865 450, 845 490 Z" 
+            fill="url(#featherLit)" stroke="#cac1af" stroke-width="3" />
+      <!-- 颈部卷羽皱褶 -->
+      <path d="M 830 380 Q 855 400 875 375" fill="none" stroke="#c0b5a1" stroke-width="3" stroke-linecap="round" />
+      <path d="M 815 425 Q 840 445 860 420" fill="none" stroke="#c0b5a1" stroke-width="3" stroke-linecap="round" />
+    </g>
+
+    <!-- 标志性头部与蓬松卷羽头冠 (Dalmatian Pelican Signature Curly Crest) -->
+    <g id="pelican-hero-head-crest">
+      <!-- 脑后丰满卷曲银灰冠羽群 -->
+      <g id="hero-curly-feathers">
+        <path d="M 845 300 C 820 280, 805 255, 825 240 C 845 240, 860 265, 858 285 Z" fill="#ffffff" stroke="#bfb6a4" stroke-width="2.5" />
+        <path d="M 865 280 C 850 255, 845 225, 870 220 C 890 225, 890 255, 882 278 Z" fill="#fdfcf9" stroke="#bfb6a4" stroke-width="2.5" />
+        <path d="M 885 270 C 885 245, 895 220, 918 225 C 930 240, 920 265, 905 280 Z" fill="#eae5da" stroke="#bfb6a4" stroke-width="2.5" />
+        <path d="M 830 315 C 800 305, 795 280, 815 270 C 835 270, 845 290, 842 310 Z" fill="#ded7c6" stroke="#b0a693" stroke-width="2" />
+        <path d="M 855 250 C 840 230, 845 210, 865 205 C 880 215, 875 235, 868 250 Z" fill="#ffffff" stroke="#c4bbaa" stroke-width="2" />
+      </g>
+
+      <!-- 头部主体 -->
+      <circle cx="895" cy="305" r="38" fill="url(#featherLit)" stroke="#cfc6b5" stroke-width="2.5" />
+
+      <!-- 炯炯大眼 (得意自信、傲睨全场) -->
+      <ellipse cx="912" cy="292" rx="8.5" ry="11" fill="#221e1a" />
+      <!-- 白色高光与琥珀金虹膜光泽 -->
+      <circle cx="915" cy="288" r="3.8" fill="#ffffff" />
+      <circle cx="911" cy="296" r="1.6" fill="#fca441" />
+      <!-- 眼周裸露鲜艳粉橙色皮肤 -->
+      <path d="M 900 290 C 905 276, 926 276, 930 290 C 925 304, 904 305, 900 290 Z" fill="none" stroke="#f28755" stroke-width="3" />
+      <!-- 霸气眉弓羽毛 -->
+      <path d="M 898 278 Q 915 270 932 278" fill="none" stroke="#63584c" stroke-width="3" stroke-linecap="round" />
+    </g>
+
+    <!-- ============================================== -->
+    <!-- 核心视觉焦点：巨大鼓起喉囊 + 坚挺巨喙 + 口中鲜鱼 -->
+    <!-- ============================================== -->
+    <g id="pelican-hero-beak-pouch-fish">
+      
+      <!-- 1. 巨大鼓起的喉囊 (Throat Pouch - 硕大、极度充盈、充满战利品与空气) -->
+      <g id="hero-gular-pouch">
+        <!-- 喉囊底色与受光渐变 (极具张力与果冻半透质感) -->
+        <path d="M 920 325 
+                 Q 995 385 1060 365 
+                 C 1075 425, 1020 495, 930 495 
+                 C 860 495, 865 410, 895 350 Z" 
+              fill="url(#pouchGradLit)" stroke="#b54914" stroke-width="3.5" />
+        
+        <!-- 喉囊上的微细血管与伸展张力褶纹 (Stretched skin striations) -->
+        <path d="M 925 350 Q 980 430 1025 385" fill="none" stroke="#e0753d" stroke-width="3" stroke-linecap="round" opacity="0.85" />
+        <path d="M 905 380 Q 950 465 990 430" fill="none" stroke="#e0753d" stroke-width="2.5" stroke-linecap="round" opacity="0.8" />
+        <path d="M 885 415 Q 920 480 960 460" fill="none" stroke="#e0753d" stroke-width="2" stroke-linecap="round" opacity="0.75" />
+        
+        <!-- 喉囊顶部高光透亮区 (阳光直射处) -->
+        <ellipse cx="985" cy="410" rx="35" ry="50" fill="#ffcbb0" opacity="0.3" transform="rotate(-25, 985, 410)" filter="url(#softBlur)" />
+      </g>
+
+      <!-- 2. 口中叼着的鲜活大鱼 (Fresh Big Fish in Beak) -->
+      <!-- 鱼身横跨在上下喙之间，鱼头、鱼鳞、鱼鳍、圆眼睛、鱼尾生动活现 -->
+      <g id="caught-fish" transform="translate(1050, 310) rotate(-18)">
+        <!-- 鱼身主体 -->
+        <path d="M -60 10 
+                 C -30 -15, 40 -20, 85 0 
+                 C 120 15, 140 0, 160 -15 
+                 L 155 15 L 165 35 
+                 C 135 25, 115 15, 80 25 
+                 C 30 35, -30 30, -60 10 Z" 
+              fill="url(#fishGrad)" stroke="#163145" stroke-width="3" />
+        
+        <!-- 鱼腹亮银白色质感 -->
+        <path d="M -50 12 C 0 25, 60 22, 100 12 C 60 30, 0 32, -50 12 Z" fill="#e8f5fa" opacity="0.8" />
+
+        <!-- 鱼尾巴 (分叉大摆尾) -->
+        <polygon points="150,5 175,-25 162,10 180,45 152,20" fill="#3b789e" stroke="#163145" stroke-width="2" />
+
+        <!-- 背鳍与胸鳍 -->
+        <path d="M 10 -15 Q 35 -32 60 -12 Z" fill="#5094bd" stroke="#163145" stroke-width="2" />
+        <path d="M 20 18 Q 45 38 40 15 Z" fill="#5094bd" stroke="#163145" stroke-width="2" />
+
+        <!-- 鱼鳃与鱼眼睛 (呆萌惊讶小眼睛) -->
+        <path d="M -30 0 Q -25 15 -35 22" fill="none" stroke="#1c4461" stroke-width="2.5" />
+        <circle cx="-42" cy="8" r="6" fill="#ffffff" stroke="#163145" stroke-width="2" />
+        <circle cx="-44" cy="8" r="3" fill="#111111" />
+
+        <!-- 鱼鳞微波点缀 -->
+        <path d="M 0 5 Q 10 0 20 5 M 25 3 Q 35 -2 45 3 M 50 8 Q 60 3 70 8" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.7" />
+
+        <!-- 欢快飞溅的水滴 (Water Splashes from Fresh Catch) -->
+        <circle cx="120" cy="-25" r="4.5" fill="#e1f3fc" stroke="#68aed4" stroke-width="1.5" />
+        <circle cx="140" cy="-10" r="3" fill="#e1f3fc" stroke="#68aed4" stroke-width="1" />
+        <circle cx="170" cy="55" r="4" fill="#e1f3fc" stroke="#68aed4" stroke-width="1.5" />
+        <circle cx="-75" cy="5" r="3.5" fill="#e1f3fc" stroke="#68aed4" stroke-width="1" />
+      </g>
+
+      <!-- 3. 坚硬巨大的上下鸟喙 (Upper & Lower Mandibles) -->
+      <!-- 上喙 (覆盖在鱼体上方，从头部 915,295 延伸到 1120,330) -->
+      <g id="hero-upper-beak">
+        <!-- 上喙骨架 -->
+        <polygon points="915,295 1115,322 1125,335 918,318" fill="url(#beakGrad)" stroke="#b54e12" stroke-width="3" />
+        <!-- 喙中脊棱线 (Dorsal ridge / 犀利金属光泽) -->
+        <line x1="915" y1="298" x2="1118" y2="324" stroke="#ffebc2" stroke-width="3.5" stroke-linecap="round" />
+        <line x1="918" y1="312" x2="1080" y2="326" stroke="#943906" stroke-width="2" />
+        <!-- 尖端标志性向下锐利红钩 (Nail hook at beak tip) -->
+        <path d="M 1115,322 Q 1130,328 1124,342 Q 1112,338 1116,324 Z" fill="#a12503" stroke="#611300" stroke-width="1.5" />
+        <!-- 鼻孔小狭缝 -->
+        <ellipse cx="940" cy="302" rx="3.5" ry="1.5" fill="#692404" />
+      </g>
+
+      <!-- 下喙边缘支架 (承托喉囊，紧咬大鱼) -->
+      <path d="M 918 318 L 1090 348" stroke="#fca058" stroke-width="7" stroke-linecap="round" />
+      <path d="M 918 318 L 1090 348" stroke="#b54e12" stroke-width="2" />
+    </g>
+
+    <!-- 近侧大腿与膝盖 (向下用力踩踏近侧脚踏 920, 770) -->
+    <g id="pelican-hero-near-leg">
+      <!-- 丰满大腿羽毛裤 -->
+      <path d="M 770 580 C 800 600, 830 630, 820 665 C 795 675, 765 650, 755 615 Z" fill="#ede6d8" stroke="#cac0ae" stroke-width="3" />
+      <!-- 粗壮胫骨小腿 (金橙色角质鳞片骨骼) -->
+      <line x1="810" y1="660" x2="920" y2="760" stroke="#f0883a" stroke-width="16" stroke-linecap="round" />
+      <line x1="810" y1="660" x2="920" y2="760" stroke="#ffcf8f" stroke-width="4" stroke-linecap="round" />
+
+      <!-- ============================================== -->
+      <!-- 必须踩在踏板上的近端巨大蹼足 (Webbed Foot on Pedal) -->
+      <!-- ============================================== -->
+      <g id="hero-near-foot-webbed" transform="translate(920, 760)">
+        <!-- 宽大的黄色/橙红蹼足，足底脚趾弯曲死死扣住金属脚踏板！ -->
+        <polygon points="-12,-16 45,-4 62,20 15,26 -18,12" fill="url(#webbedFootGrad)" stroke="#9c4208" stroke-width="3.5" />
+        <!-- 三根粗壮主趾与两面半透明脚蹼膜 -->
+        <line x1="5" y1="-5" x2="58" y2="12" stroke="#7e3204" stroke-width="3" />
+        <line x1="-2" y1="2" x2="45" y2="24" stroke="#7e3204" stroke-width="2.5" />
+        <line x1="-6" y1="-10" x2="38" y2="-8" stroke="#7e3204" stroke-width="2.5" />
+        
+        <!-- 锋利黑褐色趾爪扣在踏板齿上 -->
+        <polygon points="60,18 72,24 58,26" fill="#2b1f15" />
+        <polygon points="45,-5 55,-2 43,2" fill="#2b1f15" />
+        <polygon points="15,25 24,31 12,30" fill="#2b1f15" />
+
+        <!-- 脚踝关节圆润肌腱 -->
+        <circle cx="0" cy="0" r="10" fill="#e8782a" stroke="#873403" stroke-width="2" />
+        <circle cx="-1" cy="-2" r="3" fill="#ffb873" />
+      </g>
+    </g>
+
+    <!-- 近侧大翅膀 (牢牢掌舵前把手右侧 1060, 420，翅羽如风帆展开) -->
+    <g id="pelican-hero-wing">
+      <path d="M 725 490 
+               C 760 445, 840 435, 900 480 
+               C 920 540, 870 610, 800 625 
+               C 740 635, 700 560, 725 490 Z" 
+            fill="url(#featherLit)" stroke="#cac1af" stroke-width="3" />
+      <!-- 翅羽纹理层次 -->
+      <path d="M 750 530 C 800 535, 850 560, 865 600" fill="none" stroke="#b8ad99" stroke-width="3" />
+      <path d="M 735 555 C 780 565, 820 590, 835 625" fill="none" stroke="#b8ad99" stroke-width="2.5" />
+      
+      <!-- 伸向前把手抓握的手翼主羽 (Firm grip on the handlebar) -->
+      <path d="M 880 495 Q 980 460 1060 425" fill="none" stroke="#f5ede0" stroke-width="18" stroke-linecap="round" />
+      <!-- 扣住把手的翼指腕关节 -->
+      <ellipse cx="1060" cy="425" rx="14" ry="10" fill="#ded5c4" stroke="#ad9f88" stroke-width="2.5" transform="rotate(-15, 1060, 425)" />
+    </g>
+
+  </g>
+
+  <!-- ======================================================== -->
+  <!-- LAYER 5: 前景光效与速度动感氛围 (Atmosphere & Sun Rays) -->
+  <!-- ======================================================== -->
+  <g id="layer-foreground-atmosphere" class="isometric-layer">
+    <!-- 右上方直射暖金色阳光 (Top-Right Sunlight Rays) -->
+    <g id="sunlight-rays" opacity="0.35">
+      <polygon points="1600,0 1250,0 750,1100 1100,1100" fill="url(#sunlightBeam)" />
+      <polygon points="1600,150 1450,0 950,1100 1200,1100" fill="url(#sunlightBeam)" />
+      <polygon points="1600,300 1600,100 1150,1100 1350,1100" fill="url(#sunlightBeam)" />
+    </g>
+    <linearGradient id="sunlightBeam" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fff8e7" stop-opacity="0.5" />
+      <stop offset="60%" stop-color="#faedd2" stop-opacity="0.15" />
+      <stop offset="100%" stop-color="#edd5ab" stop-opacity="0" />
+    </linearGradient>
+
+    <!-- 翘头激起的微尘与微粒 (Wheelie Dust Sparks) -->
+    <g id="wheelie-dust" opacity="0.6">
+      <circle cx="480" cy="855" r="5" fill="#b0a292" />
+      <circle cx="510" cy="860" r="3.5" fill="#c4b6a5" />
+      <circle cx="465" cy="865" r="4" fill="#9e9182" />
+      <circle cx="535" cy="850" r="2.5" fill="#ded4c5" />
+    </g>
+  </g>
+</svg>

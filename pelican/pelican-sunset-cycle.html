@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>黄昏海岸骑行 · 鹈鹕</title>
+<style>
+  :root{--ink:#18323a;--coral:#ee735d;--cream:#fff7e9;--sea:#58b7b2;--night:#202d48}
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%;background:#f4b77e;font-family:ui-rounded,"Trebuchet MS",system-ui,sans-serif;color:var(--ink)}
+  body{display:grid;place-items:center;padding:18px;overflow-x:hidden}
+  .scene-shell{width:min(1120px,100%);position:relative;filter:drop-shadow(0 18px 28px rgba(65,40,38,.18))}
+  svg{display:block;width:100%;height:auto;border-radius:28px;background:#f6c98f}
+  .toolbar{position:absolute;top:18px;left:18px;right:18px;display:flex;align-items:center;justify-content:space-between;gap:12px;pointer-events:none}
+  .brand,.controls{pointer-events:auto;background:rgba(255,247,233,.84);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.72);box-shadow:0 6px 16px rgba(84,52,44,.12)}
+  .brand{padding:10px 15px;border-radius:14px;font-weight:800;letter-spacing:.04em;font-size:14px}
+  .controls{display:flex;align-items:center;gap:8px;padding:7px;border-radius:14px}
+  button{border:0;border-radius:9px;background:var(--ink);color:#fff7e9;font:inherit;font-weight:700;padding:8px 12px;cursor:pointer}
+  button:hover{background:#2b5660}
+  label{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700;padding:0 5px}
+  input{accent-color:var(--coral);width:92px}
+  .sun{animation:sunPulse 4s ease-in-out infinite}
+  .cloud-a{animation:cloudFloat 22s linear infinite}
+  .cloud-b{animation:cloudFloat 30s linear -10s infinite}
+  .water-line{animation:waterSlide 5s linear infinite}
+  .bike{animation:roadBob .48s ease-in-out infinite alternate;transform-origin:560px 405px}
+  .wheel,.pedal-crank{animation:spin .9s linear infinite;transform-box:fill-box;transform-origin:center}
+  .pelican{animation:pelicanBob .9s ease-in-out infinite alternate;transform-origin:570px 300px}
+  .wing{animation:wingFlap .9s ease-in-out infinite alternate;transform-origin:610px 292px}
+  .leg-back{animation:legBack .9s ease-in-out infinite;transform-origin:583px 365px}
+  .leg-front{animation:legFront .9s ease-in-out infinite;transform-origin:583px 365px}
+  .flag{animation:flagWave 1.2s ease-in-out infinite alternate;transform-origin:778px 202px}
+  @keyframes sunPulse{50%{transform:scale(1.05);transform-origin:850px 115px}}
+  @keyframes cloudFloat{from{transform:translateX(-80px)}to{transform:translateX(1180px)}}
+  @keyframes waterSlide{to{transform:translateX(-120px)}}
+  @keyframes roadBob{to{transform:translateY(-3px) rotate(-.4deg)}}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @keyframes pelicanBob{to{transform:translateY(-6px) rotate(-1deg)}}
+  @keyframes wingFlap{to{transform:rotate(-10deg) translateY(-3px)}}
+  @keyframes legBack{0%,100%{transform:rotate(17deg)}50%{transform:rotate(-20deg)}}
+  @keyframes legFront{0%,100%{transform:rotate(-20deg)}50%{transform:rotate(17deg)}}
+  @keyframes flagWave{to{transform:skewY(-9deg)}}
+  .paused *{animation-play-state:paused!important}
+  @media(max-width:620px){body{padding:8px}.scene-shell{width:100%}.toolbar{top:10px;left:10px;right:10px}.brand{font-size:11px;padding:8px 10px}.controls{gap:4px}.controls label{display:none}button{padding:8px 10px}}
+  @media(prefers-reduced-motion:reduce){*{animation-play-state:paused!important}}
+</style>
+</head>
+<body>
+<main class="scene-shell" id="scene">
+  <div class="toolbar"><div class="brand">COASTAL LOOP / 07:24 PM</div><div class="controls"><button id="toggle" type="button">暂停</button><label>节奏 <input id="speed" type="range" min="0.5" max="1.8" step="0.1" value="1"></label></div></div>
+  <svg viewBox="0 0 1000 620" role="img" aria-label="黄昏海边，一只戴着小帽子的鹈鹕骑自行车经过海岸公路">
+    <defs>
+      <linearGradient id="sky2" x2="0" y2="1"><stop stop-color="#f27968"/><stop offset=".55" stop-color="#f6b77c"/><stop offset="1" stop-color="#ffe2a9"/></linearGradient>
+      <linearGradient id="water2" x2="0" y2="1"><stop stop-color="#4b9eab"/><stop offset="1" stop-color="#276b7d"/></linearGradient>
+      <linearGradient id="road2" x2="0" y2="1"><stop stop-color="#445c60"/><stop offset="1" stop-color="#203d48"/></linearGradient>
+      <filter id="soft"><feGaussianBlur stdDeviation="5"/></filter>
+    </defs>
+    <rect width="1000" height="620" fill="url(#sky2)"/>
+    <circle class="sun" cx="850" cy="115" r="60" fill="#ffe8a1" opacity=".9"/>
+    <g class="cloud-a" fill="#fff0d4" opacity=".35"><ellipse cx="130" cy="140" rx="92" ry="22"/><ellipse cx="190" cy="130" rx="62" ry="30"/><ellipse cx="64" cy="130" rx="48" ry="25"/></g>
+    <g class="cloud-b" fill="#fff4dd" opacity=".28"><ellipse cx="520" cy="90" rx="110" ry="20"/><ellipse cx="585" cy="82" rx="55" ry="27"/></g>
+    <path d="M0 310 Q170 280 330 315T680 300T1000 318V440H0Z" fill="url(#water2)"/>
+    <g class="water-line" stroke="#a8ded1" stroke-width="4" opacity=".55" fill="none"><path d="M40 355h120m70-12h90m55 20h140m48-16h125m48 10h160"/><path d="M-100 394h170m55-9h110m45 14h180m60-15h150m55 12h160"/></g>
+    <path d="M0 366 Q170 338 350 370T700 360T1000 374V620H0Z" fill="#d9a86e"/>
+    <path d="M0 438 Q240 395 480 430T1000 420V620H0Z" fill="url(#road2)"/>
+    <path d="M0 456 Q250 420 500 451T1000 440" stroke="#f7d58f" stroke-width="6" fill="none" opacity=".8"/>
+    <g stroke="#efc77d" stroke-width="8" stroke-linecap="round" opacity=".9"><path d="M55 535h85"/><path d="M245 505h85"/><path d="M455 540h85"/><path d="M680 500h85"/><path d="M875 535h85"/></g>
+    <g fill="#2d6e68"><path d="M90 402q12-80 27 0z"/><path d="M110 405q28-104 40 0z"/><path d="M900 408q18-100 30 0z"/><path d="M920 410q35-126 49 0z"/></g>
+    <g class="flag"><path d="M778 202v128" stroke="#233f4c" stroke-width="5"/><path d="M780 205q35 8 60-5v38q-27 13-60 1z" fill="#ee735d"/><circle cx="778" cy="198" r="6" fill="#fff2c5"/></g>
+    <ellipse cx="555" cy="485" rx="190" ry="19" fill="#102e3b" opacity=".28" filter="url(#soft)"/>
+    <g class="bike" stroke="#18323a" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <g class="wheel"><circle cx="435" cy="430" r="68" stroke="#f9e0a5"/><circle cx="690" cy="430" r="68" stroke="#f9e0a5"/><path d="M435 362v136m-68-68h136m-48-48 96 96m0-96-96 96" stroke="#83c5bd" stroke-width="3"/></g>
+      <path d="M435 430l115-55 140 55-115 0zM550 375l35 105M690 430l-42-72M648 358l-35-2"/>
+      <path d="M603 356h50"/><circle cx="583" cy="480" r="17" stroke="#f4bd65"/><g class="pedal-crank"><path d="M583 480l39 18m-39-18-35-22" stroke="#f4bd65"/><circle cx="622" cy="498" r="6" fill="#f4bd65"/><circle cx="548" cy="458" r="6" fill="#f4bd65"/></g>
+    </g>
+    <g class="pelican">
+      <path d="M545 354q-15-88 41-123 64-40 113 14 25 28 14 71-12 46-72 55z" fill="#f4eee1" stroke="#18323a" stroke-width="6"/>
+      <path class="wing" d="M606 284q45-35 80 3l-32 64q-34 1-65-23z" fill="#d1d9cf" stroke="#18323a" stroke-width="6"/>
+      <path d="M645 229q14-45 62-38 42 5 55 43l-36 18z" fill="#f4eee1" stroke="#18323a" stroke-width="6"/>
+      <path d="M704 236q64 4 105 34-34 39-112 5z" fill="#f19b68" stroke="#18323a" stroke-width="6"/>
+      <circle cx="711" cy="222" r="8" fill="#18323a"/><circle cx="714" cy="219" r="3" fill="#fff7e9"/>
+      <path d="M685 189q24-20 51 1l-6 15h-47z" fill="#ee735d" stroke="#18323a" stroke-width="5"/><path d="M690 184q-2-15 9-22m14 19q5-16 19-19" stroke="#18323a" stroke-width="4" fill="none"/>
+      <path class="leg-back" d="M583 358l-20 87 39 8" stroke="#f19b68" stroke-width="12" fill="none" stroke-linecap="round"/><path class="leg-front" d="M583 358l37 80-38 20" stroke="#f19b68" stroke-width="12" fill="none" stroke-linecap="round"/>
+      <path d="M548 345q-38-15-54 2 21 19 57 7z" fill="#f19b68" stroke="#18323a" stroke-width="5"/>
+    </g>
+    <g fill="#f8df9b" opacity=".8"><circle cx="236" cy="273" r="4"/><circle cx="264" cy="245" r="3"/><circle cx="296" cy="285" r="5"/><circle cx="740" cy="300" r="3"/></g>
+    <text x="54" y="570" fill="#ffeac0" opacity=".8" font-size="13" font-weight="700" letter-spacing="3">KEEP ROLLING / KEEP TIDAL</text>
+  </svg>
+</main>
+<script>
+  const scene=document.querySelector('#scene');
+  const toggle=document.querySelector('#toggle');
+  const speed=document.querySelector('#speed');
+  toggle.addEventListener('click',()=>{const paused=scene.classList.toggle('paused');toggle.textContent=paused?'继续':'暂停'});
+  speed.addEventListener('input',()=>{document.documentElement.style.setProperty('--rate',speed.value);document.querySelectorAll('svg *').forEach(el=>{const current=getComputedStyle(el).animationDuration;if(current!=='0s'){el.style.animationDuration=(parseFloat(current)/speed.value)+'s'}})});
+</script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>PELICAN · Three.js 等距 SVG 风格场景</title>
+<style>
+  :root{color-scheme:dark;font-family:Inter,Segoe UI,sans-serif}*{box-sizing:border-box}body{margin:0;overflow:hidden;background:#d8d3c8;color:#f8f4ea}#hud{position:fixed;left:24px;top:22px;z-index:2;pointer-events:none;text-shadow:0 2px 10px #20313a88}h1{margin:0;font-size:22px;letter-spacing:.16em;font-weight:800}p{margin:8px 0 0;color:#f4ead9;font-size:12px;letter-spacing:.08em}#hint{position:fixed;right:22px;bottom:18px;color:#35434a;font-size:11px;letter-spacing:.06em;background:#eee8dcbb;padding:9px 12px;border:1px solid #fff8;border-radius:6px}canvas{display:block}</style>
+</head>
+<body>
+<div id="hud"><h1>PELICAN</h1><p>LEFT-FRONT ISOMETRIC · SVG STUDY</p></div>
+<div id="hint">拖拽旋转 · 滚轮缩放 · R 重置视角</div>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+
+const scene=new THREE.Scene(); scene.background=new THREE.Color('#d8d3c8');
+const camera=new THREE.OrthographicCamera(-6.2,6.2,4.1,-4.1,.1,100); camera.position.set(-8,5.6,9); camera.lookAt(0,1.5,0);
+const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false}); renderer.setPixelRatio(Math.min(devicePixelRatio,2)); renderer.setSize(innerWidth,innerHeight); renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap; renderer.outputColorSpace=THREE.SRGBColorSpace; renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.15; document.body.appendChild(renderer.domElement);
+const controls=new OrbitControls(camera,renderer.domElement); controls.enableDamping=true; controls.target.set(0,1.3,0); controls.minZoom=1.2; controls.maxZoom=2.2;
+addEventListener('resize',()=>{const a=innerWidth/innerHeight; camera.left=-6.2*a;camera.right=6.2*a;camera.top=4.1;camera.bottom=-4.1;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)}); addEventListener('keydown',e=>{if(e.key.toLowerCase()==='r'){camera.position.set(-8,5.6,9);camera.zoom=1;camera.lookAt(0,1.5,0);controls.target.set(0,1.3,0);controls.update()}});
+const mat=(color,rough=.8)=>new THREE.MeshStandardMaterial({color,roughness:rough,flatShading:true});
+const ink=mat('#293e43'), coral=mat('#c96850'), cream=mat('#efe1c4'), pouch=mat('#d98b67'), blue=mat('#35616a'), tire=mat('#233437'), metal=mat('#b6a88e'), gold=mat('#d29b45'), white=mat('#f7f0df');
+const root=new THREE.Group(); root.name='SCENE__PELICAN_BICYCLE'; scene.add(root);
+function tag(o,name,layer){o.name=name;o.userData.layer=layer;return o}
+function cylBetween(a,b,r,material,name,layer='bicycle/frame'){const d=new THREE.Vector3().subVectors(b,a), m=new THREE.Mesh(new THREE.CylinderGeometry(r,r,d.length,8),material);m.position.copy(a).add(b).multiplyScalar(.5);m.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.normalize());m.castShadow=true;return tag(m,name,layer)}
+function wheel(x,y,r,front=false){const g=tag(new THREE.Group(),front?'BIKE__FRONT_WHEEL_LIFTED':'BIKE__REAR_WHEEL','bicycle/wheels');g.position.set(x,y,0);const w=new THREE.Mesh(new THREE.TorusGeometry(r,.095,8,32),tire);w.rotation.x=Math.PI/2;w.castShadow=true;g.add(w);for(let i=0;i<12;i++){const a=i*Math.PI/6;g.add(cylBetween(new THREE.Vector3(0,0,.03),new THREE.Vector3(Math.cos(a)*r,Math.sin(a)*r,.03),.012,metal,'SPOKE_'+i,'bicycle/wheels/spokes'))}g.add(tag(new THREE.Mesh(new THREE.CylinderGeometry(.12,.12,.16,12),metal),'HUB','bicycle/wheels'));return g}
+const bike=tag(new THREE.Group(),'BIKE__WHEELIE_ASSEMBLY','bicycle');root.add(bike);
+const rear=wheel(1.55,.72,.72,false), front=wheel(-1.55,1.55,.72,true); bike.add(rear,front);
+const rearHub=new THREE.Vector3(1.55,.72,0), frontHub=new THREE.Vector3(-1.55,1.55,0), crank=new THREE.Vector3(.1,1.1,0), seatPost=new THREE.Vector3(.72,1.92,0), handlePost=new THREE.Vector3(-.72,2.15,0);
+[[rearHub,crank],[crank,frontHub],[frontHub,handlePost],[handlePost,seatPost],[seatPost,rearHub],[seatPost,crank]].forEach((p,i)=>bike.add(cylBetween(p[0],p[1],.075,coral,'FRAME_TUBE_'+i)));
+bike.add(cylBetween(new THREE.Vector3(.72,1.92,0),new THREE.Vector3(.72,2.22,0),.045,ink,'SEAT_POST')); bike.add(cylBetween(new THREE.Vector3(.57,2.22,-.02),new THREE.Vector3(.9,2.22,-.02),.07,ink,'SEAT_TANDEM'));
+bike.add(cylBetween(new THREE.Vector3(-.72,2.15,0),new THREE.Vector3(-.86,2.5,0),.05,ink,'HANDLE_STEM')); bike.add(cylBetween(new THREE.Vector3(-1.04,2.5,-.18),new THREE.Vector3(-.68,2.5,.18),.045,ink,'HANDLEBAR'));
+const ring=new THREE.Mesh(new THREE.TorusGeometry(.25,.045,8,24),gold);ring.position.copy(crank);ring.rotation.x=Math.PI/2;bike.add(tag(ring,'CHAINRING','bicycle/drivetrain')); bike.add(tag(new THREE.Mesh(new THREE.CylinderGeometry(.08,.08,.11,16),gold),'CRANK_HUB','bicycle/drivetrain')).position.copy(crank);
+const chainCurve=new THREE.CatmullRomCurve3([new THREE.Vector3(.1,1.35,.08),new THREE.Vector3(.1,.85,.08),new THREE.Vector3(1.55,.42,.08),new THREE.Vector3(1.55,1.02,.08)],true);const chain=new THREE.Mesh(new THREE.TubeGeometry(chainCurve,64,.032,6,true),gold);bike.add(tag(chain,'CHAIN__CRANK_TO_REAR_FLYWHEEL','bicycle/drivetrain'));
+const fly=new THREE.Mesh(new THREE.TorusGeometry(.14,.035,8,16),gold);fly.position.set(1.55,.72,.1);fly.rotation.x=Math.PI/2;bike.add(tag(fly,'REAR_FLYWHEEL','bicycle/drivetrain'));
+const plate=new THREE.Mesh(new THREE.BoxGeometry(1.3,.23,.08),cream);plate.position.set(0,1.54,-.12);bike.add(tag(plate,'FRAME_PLATE__PELICAN','bicycle/lettering')); const textCanvas=document.createElement('canvas');textCanvas.width=512;textCanvas.height=96;const ctx=textCanvas.getContext('2d');ctx.fillStyle='#efe1c4';ctx.fillRect(0,0,512,96);ctx.fillStyle='#293e43';ctx.font='bold 58px Arial';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('PELICAN',256,49);const tex=new THREE.CanvasTexture(textCanvas);plate.material=new THREE.MeshStandardMaterial({map:tex,roughness:.8});
+function pelican(x,y,rot,back=false){const g=tag(new THREE.Group(),back?'PELICAN__REAR_RIDER':'PELICAN__FRONT_RIDER','pelicans');g.position.set(x,y,back?-.08:.08);g.rotation.z=rot;const body=new THREE.Mesh(new THREE.SphereGeometry(.58,16,10),blue);body.scale.set(1.15,.85,.72);body.castShadow=true;g.add(tag(body,'BODY__CURL_FEATHERS','pelican/body'));const neck=new THREE.Mesh(new THREE.CylinderGeometry(.25,.34,.72,10),white);neck.position.set(-.28,.55,0);neck.rotation.z=-.2;neck.castShadow=true;g.add(tag(neck,'NECK','pelican/neck'));const head=new THREE.Mesh(new THREE.SphereGeometry(.34,14,10),white);head.position.set(-.42,.92,0);head.castShadow=true;g.add(tag(head,'HEAD','pelican/head'));const beak=new THREE.Mesh(new THREE.ConeGeometry(.17,.82,8),coral);beak.rotation.z=-Math.PI/2;beak.position.set(-.83,.88,0);beak.scale.y=.6;beak.castShadow=true;g.add(tag(beak,'BEAK__FISH_HOLDER','pelican/beak'));const fish=new THREE.Mesh(new THREE.SphereGeometry(.1,8,6),gold);fish.scale.set(1.8,.7,.5);fish.position.set(-1.2,.89,0);g.add(tag(fish,'FISH_IN_BEAK','pelican/beak'));const pouchM=new THREE.Mesh(new THREE.SphereGeometry(.38,12,8),pouch);pouchM.scale.set(.7,.9,.8);pouchM.position.set(-.48,.52,0);pouchM.castShadow=true;g.add(tag(pouchM,'THROAT_POUCH__FULL','pelican/pouch'));const wing=new THREE.Mesh(new THREE.SphereGeometry(.42,12,8),cream);wing.scale.set(1,.35,.6);wing.position.set(.08,.42,back?-.35:.35);wing.rotation.z=-.45;wing.castShadow=true;g.add(tag(wing,'WING__CURL_FEATHERS','pelican/wing'));const eye=new THREE.Mesh(new THREE.SphereGeometry(.035,8,6),ink);eye.position.set(-.54,1.05,.3);g.add(tag(eye,'EYE','pelican/head'));for(const z of [-.22,.22]){const leg=cylBetween(new THREE.Vector3(.05,.08,z),new THREE.Vector3(.08,-.3,z),.055,coral,'LEG','pelican/feet');g.add(leg);const foot=new THREE.Mesh(new THREE.SphereGeometry(.14,8,6),coral);foot.scale.set(1.5,.35,.7);foot.position.set(.08,-.34,z);foot.castShadow=true;g.add(tag(foot,'WEBBED_FOOT_ON_PEDAL','pelican/feet'))}return g}
+bike.add(pelican(-.55,2.25,.08,false),pelican(.92,2.36,.05,true));
+const ground=tag(new THREE.Mesh(new THREE.PlaneGeometry(30,30),mat('#b8b5aa')),'GROUND__SHADOW_RECEIVER','environment');ground.rotation.x=-Math.PI/2;ground.position.y=0;ground.receiveShadow=true;scene.add(ground);
+const sun=new THREE.DirectionalLight('#fff3d6',4.2);sun.position.set(-5,10,7);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-7;sun.shadow.camera.right=7;sun.shadow.camera.top=7;sun.shadow.camera.bottom=-4;scene.add(tag(sun,'SUN__TOP_RIGHT','lighting'));scene.add(new THREE.HemisphereLight('#dce9e7','#766b5c',1.8));
+const fill=new THREE.Mesh(new THREE.CircleGeometry(2.8,48),new THREE.MeshBasicMaterial({color:'#8d7863',transparent:true,opacity:.18,depthWrite:false}));fill.rotation.x=-Math.PI/2;fill.position.set(0,.012,.3);fill.scale.set(1.7,.55,1);scene.add(tag(fill,'PAINTED_CONTACT_SHADOW','environment/shadow'));
+function animate(){requestAnimationFrame(animate);controls.update();renderer.render(scene,camera)}animate();
+window.__scene=root;
+</script>
+</body></html>

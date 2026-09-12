@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>鹈鹕骑行</title>
+  <style>
+    :root { color-scheme: light; }
+    html, body {
+      margin: 0;
+      height: 100%;
+      background: #1b3a4a;
+      overflow: hidden;
+      font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+    }
+    .stage {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: grid;
+      place-items: center;
+    }
+    svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      background: #87c4d8;
+    }
+    .hud {
+      position: absolute;
+      left: 28px;
+      bottom: 22px;
+      color: rgba(255, 248, 236, 0.92);
+      text-shadow: 0 2px 10px rgba(20, 40, 50, 0.45);
+      pointer-events: none;
+      letter-spacing: 0.18em;
+      font-size: 13px;
+    }
+    .hud b {
+      display: block;
+      font-size: 22px;
+      letter-spacing: 0.28em;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-label="一只鹈鹕正在骑自行车">
+      <defs>
+        <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#6eb7d6" />
+          <stop offset="42%" stop-color="#b7dcec" />
+          <stop offset="72%" stop-color="#f3d7b0" />
+          <stop offset="100%" stop-color="#f7c995" />
+        </linearGradient>
+        <radialGradient id="sunCore" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#fff4c8" />
+          <stop offset="55%" stop-color="#ffd36a" />
+          <stop offset="100%" stop-color="#f08a3a" stop-opacity="0.15" />
+        </radialGradient>
+        <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#ffd27a" stop-opacity="0.55" />
+          <stop offset="100%" stop-color="#ffd27a" stop-opacity="0" />
+        </radialGradient>
+        <linearGradient id="seaG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#4fa8b8" />
+          <stop offset="45%" stop-color="#2e7f96" />
+          <stop offset="100%" stop-color="#1b5c72" />
+        </linearGradient>
+        <linearGradient id="wetSand" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#e8b57a" />
+          <stop offset="100%" stop-color="#d39a5e" />
+        </linearGradient>
+        <linearGradient id="drySand" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#f3d5a0" />
+          <stop offset="100%" stop-color="#e2b56d" />
+        </linearGradient>
+        <linearGradient id="bodyG" x1="0.15" y1="0" x2="0.8" y2="1">
+          <stop offset="0%" stop-color="#fffdf8" />
+          <stop offset="45%" stop-color="#f4ead6" />
+          <stop offset="100%" stop-color="#d9c4a0" />
+        </linearGradient>
+        <linearGradient id="wingG" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#f7f1e4" />
+          <stop offset="60%" stop-color="#cfc1a6" />
+          <stop offset="100%" stop-color="#4a5360" />
+        </linearGradient>
+        <linearGradient id="beakG" x1="0" y1="0" x2="1" y2="0.4">
+          <stop offset="0%" stop-color="#f3c45a" />
+          <stop offset="55%" stop-color="#e39428" />
+          <stop offset="100%" stop-color="#c56a14" />
+        </linearGradient>
+        <linearGradient id="pouchG" x1="0.5" y1="0" x2="0.5" y2="1">
+          <stop offset="0%" stop-color="#f6d07a" />
+          <stop offset="55%" stop-color="#e3a33d" />
+          <stop offset="100%" stop-color="#c47b22" />
+        </linearGradient>
+        <linearGradient id="frameG" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#3aa0a8" />
+          <stop offset="50%" stop-color="#1c6d76" />
+          <stop offset="100%" stop-color="#0e4a52" />
+        </linearGradient>
+        <linearGradient id="tireG" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#3a4148" />
+          <stop offset="100%" stop-color="#16191c" />
+        </linearGradient>
+        <linearGradient id="legG" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#f0a45a" />
+          <stop offset="100%" stop-color="#c45c20" />
+        </linearGradient>
+        <linearGradient id="islandG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#7aa37a" />
+          <stop offset="100%" stop-color="#3e6a52" />
+        </linearGradient>
+        <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+          <feGaussianBlur stdDeviation="18" result="b" />
+          <feMerge>
+            <feMergeNode in="b" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+        <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="10" stdDeviation="7" flood-color="#3a2a18" flood-opacity="0.22" />
+        </filter>
+        <filter id="tiny" x="-30%" y="-30%" width="160%" height="160%">
+          <feDropShadow dx="0" dy="3" stdDeviation="2.2" flood-color="#2a2014" flood-opacity="0.28" />
+        </filter>
+        <radialGradient id="vignette" cx="50%" cy="45%" r="70%">
+          <stop offset="60%" stop-color="#000" stop-opacity="0" />
+          <stop offset="100%" stop-color="#3a2310" stop-opacity="0.55" />
+        </radialGradient>
+      </defs>
+
+      <rect width="1600" height="900" fill="url(#skyG)" />
+
+      <g id="sun" filter="url(#glow)">
+        <circle cx="250" cy="168" r="150" fill="url(#sunGlow)" />
+        <circle cx="250" cy="168" r="62" fill="url(#sunCore)" />
+      </g>
+
+      <g id="rays" opacity="0.18" stroke="#fff3c4" stroke-width="6" stroke-linecap="round">
+        <path d="M250 168 L250 40" />
+        <path d="M250 168 L360 86" />
+        <path d="M250 168 L140 78" />
+        <path d="M250 168 L390 175" />
+      </g>
+
+      <g id="clouds" fill="#fff7ea" opacity="0.86">
+        <g id="cloudA">
+          <ellipse cx="520" cy="128" rx="86" ry="28" />
+          <ellipse cx="470" cy="138" rx="52" ry="20" />
+          <ellipse cx="575" cy="136" rx="60" ry="22" />
+        </g>
+        <g id="cloudB" opacity="0.75">
+          <ellipse cx="1080" cy="96" rx="110" ry="32" />
+          <ellipse cx="1020" cy="108" rx="58" ry="20" />
+          <ellipse cx="1148" cy="108" rx="70" ry="24" />
+        </g>
+        <g id="cloudC" opacity="0.55">
+          <ellipse cx="1420" cy="160" rx="70" ry="20" />
+          <ellipse cx="1470" cy="168" rx="42" ry="14" />
+        </g>
+      </g>
+
+      <g id="islands">
+        <path d="M980 430 C1040 390 1120 388 1188 418 C1230 400 1290 404 1335 428 C1360 418 1400 422 1428 436 L1600 436 L1600 470 L960 470 Z" fill="url(#islandG)" />
+        <path d="M1188 418 L1196 338 L1228 418 Z" fill="#5d6d62" />
+        <rect x="1190" y="318" width="14" height="22" rx="2" fill="#f2efe4" />
+        <path d="M1182 318 L1197 292 L1212 318 Z" fill="#c44536" />
+        <path d="M210 438 C280 412 360 416 430 440 L80 448 Z" fill="#5f8a6e" opacity="0.85" />
+      </g>
+
+      <g id="sea">
+        <rect x="0" y="448" width="1600" height="170" fill="url(#seaG)" />
+        <g id="sparkles" fill="#e7f7fb" opacity="0.35">
+          <ellipse cx="180" cy="500" rx="18" ry="4" />
+          <ellipse cx="420" cy="528" rx="26" ry="5" />
+          <ellipse cx="690" cy="490" rx="16" ry="3.5" />
+          <ellipse cx="980" cy="540" rx="22" ry="4" />
+          <ellipse cx="1280" cy="508" rx="28" ry="5" />
+          <ellipse cx="1500" cy="552" rx="18" ry="3.5" />
+        </g>
+        <g id="waveBand" fill="none" stroke="#d7f1f4" stroke-width="3" opacity="0.55">
+          <path id="wave1" d="" />
+          <path id="wave2" d="" />
+          <path id="wave3" d="" />
+        </g>
+      </g>
+
+      <path d="M0 600 C220 586 480 612 760 598 C1040 584 1320 616 1600 600 L1600 900 L0 900 Z" fill="url(#wetSand)" />
+      <path d="M0 656 C260 642 540 678 820 662 C1100 646 1360 684 1600 666 L1600 900 L0 900 Z" fill="url(#drySand)" />
+
+      <g id="pathMarks" fill="none" stroke="#d7ae6c" stroke-width="10" stroke-linecap="round" opacity="0.55">
+        <path id="dashes" d="" />
+      </g>
+
+      <g id="pebbles" fill="#c9975a" opacity="0.55">
+        <ellipse cx="90" cy="780" rx="10" ry="6" />
+        <ellipse cx="240" cy="820" rx="8" ry="5" />
+        <ellipse cx="410" cy="760" rx="12" ry="6" />
+        <ellipse cx="1280" cy="800" rx="11" ry="6" />
+        <ellipse cx="1470" cy="770" rx="9" ry="5" />
+        <ellipse cx="980" cy="840" rx="14" ry="7" />
+      </g>
+
+      <g id="gulls" fill="#f7f3ea" stroke="#cfc6b6" stroke-width="2">
+        <path id="gull1" d="M220 250 q18 -16 36 0 q-18 -8 -18 6 q-18 -8 -18 -6" />
+        <path id="gull2" d="M390 210 q14 -12 28 0 q-14 -6 -14 5 q-14 -6 -14 -5" />
+        <path id="gull3" d="M1340 230 q16 -14 32 0 q-16 -7 -16 5 q-16 -7 -16 -5" />
+      </g>
+
+      <g id="reedsBack" fill="#6a8a4e">
+        <path d="M70 700 C78 640 52 600 74 540 L82 540 C64 604 92 644 86 700 Z" />
+        <path d="M108 710 C120 650 90 610 118 548 L126 550 C102 612 136 656 124 710 Z" />
+        <path d="M1480 690 C1494 630 1460 590 1492 528 L1500 530 C1472 592 1508 636 1496 690 Z" />
+      </g>
+
+      <ellipse id="contactShadow" cx="760" cy="728" rx="210" ry="18" fill="#7a5428" opacity="0.28" />
+
+      <g id="rider" filter="url(#soft)">
+        <g id="bike">
+          <g id="farWheel" transform="translate(618,668)">
+            <g class="spin">
+              <circle r="62" fill="none" stroke="url(#tireG)" stroke-width="13" />
+              <circle r="48" fill="none" stroke="#d8c7a2" stroke-width="7" />
+              <circle r="8" fill="#c9a15a" />
+              <g stroke="#b08a4a" stroke-width="2.2" opacity="0.8">
+                <line x1="0" y1="-46" x2="0" y2="46" />
+                <line x1="-46" y1="0" x2="46" y2="0" />
+                <line x1="-32" y1="-32" x2="32" y2="32" />
+                <line x1="32" y1="-32" x2="-32" y2="32" />
+              </g>
+            </g>
+          </g>
+
+          <path d="M618 668 L698 548 L748 652 Z" fill="none" stroke="url(#frameG)" stroke-width="11" stroke-linejoin="round" />
+          <path d="M698 548 L828 558" fill="none" stroke="url(#frameG)" stroke-width="10" stroke-linecap="round" />
+          <path d="M748 652 L828 558 L858 668" fill="none" stroke="url(#frameG)" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M748 652 L618 668" fill="none" stroke="url(#frameG)" stroke-width="9" stroke-linecap="round" />
+
+          <path d="M688 536 C700 520 730 522 738 538 C722 548 700 550 688 536 Z" fill="#2a2420" />
+          <path d="M828 558 L818 530 L792 524" fill="none" stroke="#1c4e55" stroke-width="8" stroke-linecap="round" />
+          <path d="M776 518 C790 508 830 508 848 522" fill="none" stroke="#14383d" stroke-width="9" stroke-linecap="round" />
+          <circle cx="776" cy="518" r="6" fill="#e8d7a8" />
+          <circle cx="848" cy="522" r="6" fill="#e8d7a8" />
+
+          <g id="basket" transform="translate(560,575)">
+            <path d="M8 18 L18 -8 L86 -8 L96 18 Z" fill="#c47a32" stroke="#8a4e18" stroke-width="3" />
+            <path d="M18 -8 C30 -28 74 -28 86 -8" fill="none" stroke="#8a4e18" stroke-width="3" />
+            <path d="M28 18 L34 -8 M50 18 L50 -8 M72 18 L68 -8" stroke="#8a4e18" stroke-width="2" opacity="0.6" />
+            <g id="fish">
+              <ellipse cx="54" cy="4" rx="22" ry="9" fill="#6fbfc4" />
+              <path d="M32 4 L16 -6 L18 12 Z" fill="#4e9aa0" />
+              <circle cx="66" cy="2" r="2.2" fill="#17343a" />
+              <path d="M58 -4 Q70 -14 78 -2" fill="none" stroke="#3e7f84" stroke-width="2" />
+            </g>
+          </g>
+
+          <g id="frontWheel" transform="translate(858,668)">
+            <g class="spin">
+              <circle r="62" fill="none" stroke="url(#tireG)" stroke-width="13" />
+              <circle r="48" fill="none" stroke="#d8c7a2" stroke-width="7" />
+              <circle r="8" fill="#c9a15a" />
+              <g stroke="#b08a4a" stroke-width="2.2" opacity="0.8">
+                <line x1="0" y1="-46" x2="0" y2="46" />
+                <line x1="-46" y1="0" x2="46" y2="0" />
+                <line x1="-32" y1="-32" x2="32" y2="32" />
+                <line x1="32" y1="-32" x2="-32" y2="32" />
+              </g>
+            </g>
+          </g>
+
+          <g id="crank" transform="translate(748,652)">
+            <circle r="16" fill="#c9a15a" stroke="#8a6a32" stroke-width="3" />
+            <g id="crankArms">
+              <line x1="0" y1="0" x2="0" y2="34" stroke="#2a3338" stroke-width="6" stroke-linecap="round" />
+              <line x1="0" y1="0" x2="0" y2="-34" stroke="#2a3338" stroke-width="6" stroke-linecap="round" />
+              <rect id="pedalNear" x="-12" y="30" width="24" height="8" rx="2" fill="#2c241c" />
+              <rect id="pedalFar" x="-12" y="-38" width="24" height="8" rx="2" fill="#2c241c" />
+            </g>
+          </g>
+        </g>
+
+        <g id="pelican">
+          <g id="farLeg">
+            <path id="farLegPath" d="" fill="none" stroke="url(#legG)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
+            <path id="farFoot" d="" fill="#d4782a" />
+          </g>
+
+          <g id="tail">
+            <path d="M628 528 C600 508 572 518 558 546 C576 552 602 548 628 540 Z" fill="#efe4cc" />
+            <path d="M572 528 C552 522 538 536 548 552" fill="none" stroke="#4a5360" stroke-width="7" stroke-linecap="round" />
+          </g>
+
+          <g id="body">
+            <path d="M650 552 C632 500 668 458 722 450 C786 440 842 478 850 526 C856 560 822 592 766 598 C710 604 664 584 650 552 Z" fill="url(#bodyG)" />
+            <path d="M690 470 C720 458 790 468 824 510" fill="none" stroke="#fffdf8" stroke-width="8" stroke-linecap="round" opacity="0.55" />
+            <path d="M700 575 C740 588 800 578 828 548" fill="none" stroke="#cbb892" stroke-width="10" stroke-linecap="round" opacity="0.35" />
+          </g>
+
+          <g id="wing">
+            <path d="M690 500 C720 478 790 482 828 518 C812 548 760 568 708 558 C682 552 674 522 690 500 Z" fill="url(#wingG)" />
+            <path d="M708 512 C744 500 790 508 816 530" fill="none" stroke="#efe6d2" stroke-width="4" opacity="0.7" />
+            <path d="M714 528 C750 520 786 528 808 546" fill="none" stroke="#b7a88c" stroke-width="3" opacity="0.55" />
+            <path d="M790 548 C808 552 824 560 836 574" fill="none" stroke="#3c4652" stroke-width="8" stroke-linecap="round" />
+          </g>
+
+          <g id="neckHead">
+            <path d="M820 500 C848 478 868 448 858 412 C852 390 830 378 808 386" fill="none" stroke="url(#bodyG)" stroke-width="28" stroke-linecap="round" />
+            <path d="M820 500 C848 478 868 448 858 412" fill="none" stroke="#fffdf8" stroke-width="8" stroke-linecap="round" opacity="0.35" />
+
+            <g id="headBeak">
+              <ellipse cx="802" cy="378" rx="28" ry="24" fill="#f6efe0" />
+              <path d="M818 372 C860 360 930 368 992 392 C1008 398 1010 412 992 418 C930 400 862 392 820 396" fill="url(#beakG)" />
+              <path d="M1000 394 C1018 390 1026 404 1014 416 C1004 424 992 414 1000 394 Z" fill="#b65a12" />
+              <path d="M828 392 C880 408 940 430 978 456 C930 470 868 448 822 414 Z" fill="url(#pouchG)" id="pouch" />
+              <path d="M848 404 C890 422 940 442 968 452" fill="none" stroke="#c47b22" stroke-width="2" opacity="0.45" />
+              <path d="M838 378 L990 404" fill="none" stroke="#fff1c2" stroke-width="3" opacity="0.35" />
+              <circle cx="792" cy="372" r="6.5" fill="#1c2428" />
+              <circle cx="794" cy="370" r="2.2" fill="#f7f3ea" />
+              <path d="M778 360 Q792 350 808 356" fill="none" stroke="#d7c4a0" stroke-width="3" stroke-linecap="round" />
+              <g id="pouchFish">
+                <path d="M900 438 L888 456 L914 454 Z" fill="#5aa3a8" />
+                <path d="M914 454 L926 448 L924 460 Z" fill="#3e7f84" />
+              </g>
+            </g>
+          </g>
+
+          <g id="nearLeg">
+            <path id="nearLegPath" d="" fill="none" stroke="url(#legG)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" />
+            <path id="nearFoot" d="" fill="#e08932" />
+          </g>
+
+          <g id="nearWingHand">
+            <path d="M790 512 C810 500 836 506 850 524 C838 532 816 530 798 524 Z" fill="#efe6d4" />
+          </g>
+        </g>
+      </g>
+
+      <g id="reedsFront" fill="#587844">
+        <path d="M0 820 C18 740 -10 700 22 620 L34 622 C8 702 40 748 20 860 L0 860 Z" />
+        <path d="M48 900 C62 800 20 760 58 670 L72 674 C38 760 78 820 64 900 Z" />
+        <path d="M1540 900 C1560 800 1518 760 1562 680 L1576 684 C1536 764 1578 824 1560 900 Z" />
+        <path d="M1588 860 C1608 780 1570 740 1600 670" fill="none" stroke="#4e6c3c" stroke-width="10" />
+      </g>
+
+      <rect width="1600" height="900" fill="url(#vignette)" opacity="0.18" style="pointer-events:none" />
+    </svg>
+    <div class="hud"><b>鹈鹕骑行</b>PELICAN COASTAL RIDE</div>
+  </div>
+
+  <script>
+    window.__errs = [];
+    window.addEventListener("error", function (e) {
+      window.__errs.push(String(e.message || e));
+    });
+
+    const CYCLE = 4800;
+    let frozen = false;
+    let p = 0;
+    let t0 = performance.now();
+
+    const $ = function (id) { return document.getElementById(id); };
+    const rearSpin = $("farWheel").querySelector(".spin");
+    const frontSpin = $("frontWheel").querySelector(".spin");
+    const crankArms = $("crankArms");
+    const rider = $("rider");
+    const pouch = $("pouch");
+    const headBeak = $("headBeak");
+    const wing = $("wing");
+    const fish = $("fish");
+    const pouchFish = $("pouchFish");
+    const contactShadow = $("contactShadow");
+    const cloudA = $("cloudA");
+    const cloudB = $("cloudB");
+    const cloudC = $("cloudC");
+    const sparkles = $("sparkles");
+    const dashes = $("dashes");
+    const pebbles = $("pebbles");
+    const wave1 = $("wave1");
+    const wave2 = $("wave2");
+    const wave3 = $("wave3");
+    const gull1 = $("gull1");
+    const gull2 = $("gull2");
+    const gull3 = $("gull3");
+    const nearLegPath = $("nearLegPath");
+    const farLegPath = $("farLegPath");
+    const nearFoot = $("nearFoot");
+    const farFoot = $("farFoot");
+    const pedalNear = $("pedalNear");
+    const pedalFar = $("pedalFar");
+    const nearWingHand = $("nearWingHand");
+
+    function sineWave(y, amp, len, phase, step) {
+      let d = "M-80 " + y;
+      for (let x = -80; x <= 1680; x += step) {
+        const yy = y + Math.sin((x + phase) * 0.018) * amp;
+        d += " L" + x + " " + yy;
+      }
+      return d;
+    }
+
+    function ik(hipX, hipY, footX, footY, len1, len2, dir) {
+      let dx = footX - hipX;
+      let dy = footY - hipY;
+      let dist = Math.hypot(dx, dy);
+      const maxd = len1 + len2 - 0.5;
+      if (dist < 1) dist = 1;
+      if (dist > maxd) {
+        dx *= maxd / dist;
+        dy *= maxd / dist;
+        dist = maxd;
+        footX = hipX + dx;
+        footY = hipY + dy;
+      }
+      const cosA = (len1 * len1 + dist * dist - len2 * len2) / (2 * len1 * dist);
+      const a = Math.acos(Math.max(-1, Math.min(1, cosA)));
+      const base = Math.atan2(dy, dx);
+      const k = base + dir * a;
+      return {
+        kx: hipX + Math.cos(k) * len1,
+        ky: hipY + Math.sin(k) * len1,
+        fx: footX,
+        fy: footY
+      };
+    }
+
+    function footShape(x, y, ang) {
+      const c = Math.cos(ang);
+      const s = Math.sin(ang);
+      function pt(px, py) {
+        return (x + px * c - py * s) + "," + (y + px * s + py * c);
+      }
+      return "M" + pt(-4, -4) + " L" + pt(18, -6) + " L" + pt(22, 2) + " L" + pt(8, 8) + " L" + pt(-6, 6) + " Z";
+    }
+
+    function apply(progress) {
+      const tau = progress * Math.PI * 2;
+      const wheelDeg = progress * 360 * 3.2;
+      const crankDeg = progress * 360 * 3.2;
+      const bounce = Math.sin(tau * 3.2) * 5.5;
+      const lean = Math.sin(tau * 1.6) * 1.4;
+
+      rearSpin.setAttribute("transform", "rotate(" + wheelDeg + ")");
+      frontSpin.setAttribute("transform", "rotate(" + wheelDeg + ")");
+      crankArms.setAttribute("transform", "rotate(" + crankDeg + ")");
+
+      rider.setAttribute("transform", "translate(0," + bounce + ") rotate(" + lean + " 748 652)");
+      contactShadow.setAttribute("transform", "translate(0," + (-bounce * 0.15) + ") scale(" + (1 + bounce * 0.004) + ",1)");
+      contactShadow.setAttribute("opacity", String(0.22 + (6 - bounce) * 0.008));
+
+      headBeak.setAttribute("transform", "rotate(" + (Math.sin(tau * 3.2) * 3.2) + " 802 378)");
+      pouch.setAttribute("transform", "translate(0," + (Math.sin(tau * 3.2 + 0.6) * 3) + ")");
+      wing.setAttribute("transform", "rotate(" + (Math.sin(tau * 3.2) * 2.4) + " 720 520)");
+      nearWingHand.setAttribute("transform", "rotate(" + (Math.sin(tau * 3.2) * 2) + " 820 518)");
+      fish.setAttribute("transform", "rotate(" + (Math.sin(tau * 6) * 8) + " 54 4)");
+      pouchFish.setAttribute("transform", "rotate(" + (Math.sin(tau * 7) * 10) + " 900 448)");
+
+      const crank = crankDeg * Math.PI / 180;
+      const cx = 748, cy = 652, arm = 34;
+      const nearX = cx + Math.sin(crank) * arm;
+      const nearY = cy + Math.cos(crank) * arm;
+      const farX = cx - Math.sin(crank) * arm;
+      const farY = cy - Math.cos(crank) * arm;
+
+      const hipN = { x: 742, y: 575 + bounce };
+      const hipF = { x: 728, y: 572 + bounce };
+      const n = ik(hipN.x, hipN.y, nearX, nearY + 4, 46, 44, 1);
+      const f = ik(hipF.x, hipF.y, farX, farY + 4, 44, 42, 1);
+      nearLegPath.setAttribute("d", "M" + hipN.x + " " + hipN.y + " L" + n.kx + " " + n.ky + " L" + n.fx + " " + n.fy);
+      farLegPath.setAttribute("d", "M" + hipF.x + " " + hipF.y + " L" + f.kx + " " + f.ky + " L" + f.fx + " " + f.fy);
+      nearFoot.setAttribute("d", footShape(n.fx, n.fy, Math.atan2(n.fy - n.ky, n.fx - n.kx)));
+      farFoot.setAttribute("d", footShape(f.fx, f.fy, Math.atan2(f.fy - f.ky, f.fx - f.kx)));
+
+      const road = (progress * 420) % 420;
+      let dash = "";
+      for (let i = -1; i < 8; i++) {
+        const x = i * 220 - road;
+        dash += " M" + x + " 710 L" + (x + 92) + " 710";
+      }
+      dashes.setAttribute("d", dash);
+      pebbles.setAttribute("transform", "translate(" + (-road * 0.35) + ",0)");
+
+      cloudA.setAttribute("transform", "translate(" + (-progress * 90) + ",0)");
+      cloudB.setAttribute("transform", "translate(" + (-progress * 50) + "," + (Math.sin(tau) * 4) + ")");
+      cloudC.setAttribute("transform", "translate(" + (-progress * 30) + ",0)");
+      sparkles.setAttribute("opacity", String(0.22 + 0.18 * (0.5 + 0.5 * Math.sin(tau * 2))));
+      sparkles.setAttribute("transform", "translate(" + (-progress * 40) + ",0)");
+
+      const ph = progress * 160;
+      wave1.setAttribute("d", sineWave(478, 7, 1600, ph, 20));
+      wave2.setAttribute("d", sineWave(508, 10, 1600, ph * 1.4 + 40, 22));
+      wave3.setAttribute("d", sineWave(548, 8, 1600, ph * 0.8 + 90, 24));
+      wave1.setAttribute("opacity", "0.7");
+      wave2.setAttribute("opacity", "0.45");
+      wave3.setAttribute("opacity", "0.28");
+
+      const flap = 8 + Math.sin(tau * 4) * 6;
+      gull1.setAttribute("transform", "translate(" + (Math.sin(tau) * 10) + "," + (Math.cos(tau * 1.3) * 6) + ") rotate(" + (flap - 8) + " 238 250)");
+      gull2.setAttribute("transform", "translate(" + (Math.cos(tau * 0.8) * 8) + "," + (Math.sin(tau * 1.1) * 5) + ")");
+      gull3.setAttribute("transform", "translate(" + (Math.sin(tau * 0.7) * 12) + ",0)");
+
+      window.__state = {
+        p: progress,
+        bounce: bounce,
+        wheelDeg: wheelDeg,
+        frozen: frozen
+      };
+    }
+
+    Object.defineProperty(window, "__freeze", {
+      get: function () { return frozen; },
+      set: function (v) { frozen = !!v; }
+    });
+    window.__setP = function (v) {
+      p = ((Number(v) % 1) + 1) % 1;
+      t0 = performance.now() - p * CYCLE;
+      apply(p);
+    };
+
+    function frame(now) {
+      if (!frozen) {
+        p = ((now - t0) / CYCLE) % 1;
+        apply(p);
+      }
+      requestAnimationFrame(frame);
+    }
+    apply(0);
+    requestAnimationFrame(frame);
+  </script>
+</body>
+</html>
